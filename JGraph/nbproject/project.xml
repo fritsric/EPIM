@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>org.jgraph</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>com.jgraph.algebra</package>
+                <package>com.jgraph.algebra.cost</package>
+                <package>com.jgraph.components.labels</package>
+                <package>com.jgraph.io.svg</package>
+                <package>com.jgraph.layout</package>
+                <package>com.jgraph.layout.graph</package>
+                <package>com.jgraph.layout.hierarchical</package>
+                <package>com.jgraph.layout.hierarchical.model</package>
+                <package>com.jgraph.layout.organic</package>
+                <package>com.jgraph.layout.routing</package>
+                <package>com.jgraph.layout.simple</package>
+                <package>com.jgraph.layout.tree</package>
+                <package>com.jgraph.navigation</package>
+                <package>com.jgraph.util</package>
+                <package>org.jgraph</package>
+                <package>org.jgraph.event</package>
+                <package>org.jgraph.graph</package>
+                <package>org.jgraph.plaf</package>
+                <package>org.jgraph.plaf.basic</package>
+                <package>org.jgraph.util</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/jgraph.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jgraph.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

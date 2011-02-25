@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="cz-cvut-indepmod-classmodel-toolchooser-OpenToolChooserAction.instance">
+                <attr name="component" methodvalue="cz.cvut.indepmod.classmodel.toolchooser.ToolChooser.findInstance"/>
+                <attr name="displayName" bundlevalue="cz.cvut.indepmod.classmodel.toolchooser.Bundle#OpenToolChooserAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="OpenToolChooserAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/cz-cvut-indepmod-classmodel-toolchooser-OpenToolChooserAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="ToolChooser.settings" url="ToolChooserSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="properties">
+                <file name="ToolChooser.wstcref" url="ToolChooserWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

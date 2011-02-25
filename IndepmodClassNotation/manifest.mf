@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cvut.indepmod.classmodel
+OpenIDE-Module-Layer: cz/cvut/indepmod/classmodel/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cvut/indepmod/classmodel/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

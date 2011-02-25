@@ -1,0 +1,13 @@
+nbproject/private
+build
+*/build
+*/nbproject/private
+IndepmodClassNotation/coverage
+coverage.properties
+documentation/*/*.pdf
+documentation/*/*.log
+documentation/*/*.aux
+documentation/*/*.dvi
+documentation/*/*.blg
+documentation/*/*.bbl
+documentation/*/*.out
