@@ -1,5 +1,7 @@
 package cz.cvut.hnatuluk.factories.WordFactory;
 
+import cz.cvut.hnatuluk.visitor.WordVisitor;
+import cz.cvut.indepmod.classmodel.api.model.IClassModelModel;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.Body;
 import org.docx4j.wml.ObjectFactory;
@@ -30,6 +32,10 @@ public class WordDocument {
 
     public WordprocessingMLPackage getWmlPackage() {
         return wmlPackage;
+    }
+    
+    public void visit(WordVisitor v, IClassModelModel model){
+        v.visitClassModel(this, model);
     }
     
 }

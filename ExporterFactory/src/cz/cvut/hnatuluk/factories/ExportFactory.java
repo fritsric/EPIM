@@ -18,7 +18,7 @@ public class ExportFactory {
     private static ConfigurableApplicationContext ctx;
 
     private static void init() {
-        if (ctx != null) {
+        if (ctx == null) {
             ctx = new ClassPathXmlApplicationContext("cz/cvut/hnatuluk/factories/ExportFactory.xml");
             ctx.registerShutdownHook();
         }

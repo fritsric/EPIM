@@ -12,24 +12,18 @@
     <bean id="ExcelFileChecker" class="cz.cvut.hnatuluk.checkers.CustomFileChecker">
         <constructor-arg name="extension">
             <array >
-                <value>
-                    .xls 
-                </value>
-                <value>
-                    .xlsx
-                </value>
+                <value>.xls</value>
+                <value>.xlsx</value>
             </array>
         </constructor-arg>
     </bean>
     <bean id="WordFactory" class="cz.cvut.hnatuluk.factories.WordFactory.WordOutputFactory">
-        <property name="excellChecker" ref="WordFileChecker"/>
+        <property name="docChecker" ref="WordFileChecker"/>
     </bean>
     <bean id="WordFileChecker" class="cz.cvut.hnatuluk.checkers.CustomFileChecker">
         <constructor-arg name="extension">
             <array >
-                <value>
-                    .docx 
-                </value>
+                <value>.docx</value>
             </array>
         </constructor-arg>
     </bean>    

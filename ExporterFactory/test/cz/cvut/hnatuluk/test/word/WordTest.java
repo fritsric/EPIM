@@ -25,8 +25,8 @@ public class WordTest {
     
     @Test
     public void testExtensions() throws Exception{
-        File f = new File("testfile.docx");
-        WordOutputFactory wof = ExportFactory.getWordFactory();
+        WordOutputFactory wof = ExportFactory.getWordFactory();        
+        File f = wof.createOutputFile("testfile.docx");
         WordDocument wd = wof.createOutputWorkbook(f);
         WordDocument wd1 = wof.createOutWorkbook(f.getName());
     }
