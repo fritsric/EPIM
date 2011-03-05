@@ -11,3 +11,4 @@ documentation/*/*.dvi
 documentation/*/*.blg
 documentation/*/*.bbl
 documentation/*/*.out
+/ExporterFactory/dist/
