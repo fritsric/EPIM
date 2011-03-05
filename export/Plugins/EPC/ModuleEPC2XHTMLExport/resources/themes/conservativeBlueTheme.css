@@ -1,0 +1,46 @@
+@media screen {
+    body {
+        background-color: #f0f0fa;
+    }
+    h1 {
+        color: #000080;
+    }
+    caption {
+        color: #000080;
+    }
+    td, th {
+        border: 1px solid #666;
+    }
+    th {
+        background-color: #A4C0E4;
+        color: #000;
+    }
+    td {
+        background-color: #fff;
+    }
+    tr:hover td {
+        background-color: #eeeeff;
+    }
+}
+
+@media print {
+	body {
+		background-color: transparent;
+	}
+	h1 {
+		color: #000080;
+	}
+	caption {
+		color: #000080;
+	}
+	td, th {
+		border: 1px solid #666;
+	}
+	th {
+		background-color: #A4C0E4;
+		color: #000;
+	}
+	td {
+		background-color: transparent;
+	}
+}

@@ -1,0 +1,8 @@
+====== {title} ======
+
+** Please, replace the following path by the path where you have uploaded your graph image.**
+{{{{wiki:{imageName}}}}}
+
+{nodeTable}
+
+{linkTable}

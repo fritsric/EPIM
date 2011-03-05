@@ -1,0 +1,90 @@
+Dokumentace k docx šablonì
+==========================
+
+Seznam povolených tagù a co mohou obsahovat
+-------------------------------------------
+-- WIP --
+
+Jak si pøedstavuju, že se to bude parsit
+----------------------------------------
+
+Mno, nevím úplnì jak to má Java s XML. Ale oèekával bych, že minimálnì pro každý uzel budu schpen dostat seznam všech potomkù.
+Tady to co jsem napsal mi trochu pøipomíná Parser z PJP. Taky to má takovou kaskádovito-delegaèní povahu.
+
+root = template.getroot(); // seženu si koøenový prvek, tj. <docxtemplate>
+
+foreach(item1 in root.GetChildNodes())
+{
+    switch(item1.NodeName)
+    {
+        case "header":
+            generuj hlavièku(item1.GetContents());
+        case "footer":
+            generuj patièku(item1.GetContents());
+        case "statictext":
+            generuj text(item1.GetContents());
+        case "heading":
+            // TODO: heading mùže obsahovat další tagy
+            generuj nadpis(item1.GetContent());
+        case "model":
+            ParseModel(item1);
+    }
+}
+
+ParseModel(XMLTreeNode item)
+{
+    foreach(item1 in item.GetChildNodes())
+    {
+        switch(item1.NodeName)
+        {
+            case "statictext":
+                generuj text(item1.GetContents());
+            case "heading":
+                generuj nadpis(item1.GetContent());
+            case "modelimage":
+                vyser tam ten obrázek();
+            case "classlist":
+                ParseClassList(item1);
+        }
+    }
+}
+
+ParseModel(XMLTreeNode item)
+{
+    foreach(item1 in item.GetChildNodes())
+    {
+        switch(item1.NodeName)
+        {
+            case "statictext":
+                generuj text(item1.GetContents());
+            case "heading":
+                generuj nadpis(item1.GetContent());
+            case "item":
+                ParseClassListMembers(item1);
+        }
+    }
+}
+
+ParseClassListMembers(XMLTreeNode item)
+{
+    // teï to pøijde! tady si vezmu ty tøídy, které dostanu z IM a pro každou projedu item a provedu generování!
+    foreach(ClassFromIndependentModeller cls in IndependentModeller.getClasses())
+    {
+        foreach(item1 in item.GetChildNodes())
+        {
+            switch(item1.NodeName)
+            {
+                case "statictext":
+                    generuj text(item1.GetContents());
+                case "heading":
+                    generuj nadpis(item1.GetContent());
+                case "attrlist":
+                    ParseAttributes(cls, item1);
+                case "methodlist":
+                    ParseMethodList(cls, item1);
+                case "relationlist":
+                    ParseRelations(cls, item1);
+            }
+        }
+    }
+}

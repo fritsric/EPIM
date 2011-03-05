@@ -1,0 +1,32 @@
+<docxtemplate>
+    <header>Toto je záhlaví. Bude na všech stránkách dokumentu.</header>
+    <footer>Toto je zápatí. Taky bude na všech stránkách. Ten tag by se mìl dát umístit i za uzavírací tag modelu.</footer>
+    <statictext>Toto je výpis class modelu z Independent Modelleru.</statictext>
+    <model>
+        <modelimage />
+        <classlist>
+            <statictext style="format1">Tady zaèíná výpis tøíd. Iterovat se bude pøes item.</statictext>
+            <item>
+                <heading style="format2"><statictext>Tøída </statictext><classname style="format3" /></heading>
+                <attrlist>
+                    <statictext>Tady zaèíná výpis atributù tøídy.</statictext>
+                    <item>
+                        <statictext>Jméno atributu: </statictext>
+                        <attrname style="format5" />
+                        <statictext>Datový typ: </statictext>
+                        <attrdatatype style="format6" />
+                    </item>
+                    <statictext>Konec výpisu atributù....</statictext>
+                </attrlist>
+                <methodlist>
+                    <statictext>Výpis metod</statictext>
+                </methodlist>
+                <statictext>No a tady by mohly být vazby k dalším tøídám, ne?</statictext>
+                <statictext>Pøípadnì vyøešené dìdiènosti, kompozice, dekompozice a tyhle h***a.</statictext>
+                <statictext>Tady konèí výpis tøídy </statictext><classname style="format4" />
+            </item>
+            <statictext>Tady konèí výpis tøíd. Je možné na konec pøidat napø. vodorovnou èáru a podobnì.</statictext>
+        </classlist>
+    </model>
+    <statictext>Taky tady mùže být nìjaký text.</statictext>
+</docxtemplate>
