@@ -46,6 +46,9 @@ public class WordOutputFactory {
         }
         if (!f.exists() || f.delete()) {
             File ret = new File(f.getAbsolutePath());
+            File parFold = ret.getParentFile();
+            if(parFold!=null&&!parFold.exists())
+                parFold.mkdirs();
             ret.createNewFile();
             return ret;
         } else {
