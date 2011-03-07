@@ -1,9 +1,211 @@
 Dokumentace k docx šablonì
 ==========================
 
-Seznam povolených tagù a co mohou obsahovat
--------------------------------------------
--- WIP --
+Seznam povolených tagù a co mohou obsahovat a èemu odpovídají v IndepMod API
+----------------------------------------------------------------------------
+docxtemplate (koøen)
+- atributy: -
+- children:
+  - header
+  - footer
+  - heading
+  - statictext
+  - model
+
+header, footer
+- atributy: zatím nic
+- children:
+  - prostý text
+
+statictext
+- atributy: style
+- children:
+  - prostý text
+
+heading
+- atributy: style
+- children:
+  - statictext
+  - classname
+
+model
+- atributy: zatím nic
+- children:
+  - modelimage
+  - classlist
+  - statictext
+  - heading
+
+modelimage (místo nìj se vloží obrázek modelu)
+- atributy: zatím nic
+- nepárový tag
+
+classlist
+- atributy: zatím nic
+- children:
+  - statictext
+  - class
+  - heading
+
+class
+- atributy: zatím nic
+- children:
+  - statictext
+  - heading
+  - classname
+  - classvisibility
+  - attrlist
+  - methodlist
+  - anotationlist
+  - relationlist
+
+classname, classvisibility
+- atributy: style
+- nepárový tag
+
+anotationlist
+- atributy: zatím nic
+- children:
+  - anotation
+  - statictext
+  - heading
+
+anotation
+- children:
+  - statictext
+  - heading
+  - anotationname
+  - anotationattrs
+
+anotationname (IAnotation::getName)
+- atributy: style
+- nepárový tag
+
+anotationattrs (IAnotation::getAttributes)
+- children:
+  - statictext
+  - heading
+  - anotationattrname
+  - anotationattrvaluelist
+
+anotationattrname (IAnotationValue::getName)
+- atributy: style
+- nepárový tag
+
+anotationattrvaluelist (IAnotationValue::getValues)
+- children:
+  - anotationattrvalue
+  - heading
+  - statictext
+
+anotationattrvalue
+- atributy: style
+- nepárový tag
+
+attrlist
+- children:
+  - attribute
+  - heading
+  - statictext
+  
+attribute
+- children:
+  - heading
+  - statictext
+  - attrname
+  - attrvisibility
+  - attrdatatype
+  - anotationlist
+
+attrname (IAttribute::getName)
+- atributy: style
+- nepárový tag
+
+attrvisibility (IAttribute::getVisibility)
+- atributy: style
+- nepárový tag
+
+attrdatatype (IAttribute::getType()::getTypeName)
+- atributy: style
+- nepárový tag
+
+methodlist
+- children:
+  - heading
+  - statictext
+  - method
+
+method
+- children:
+  - heading
+  - statictext
+  - methodvisibility
+  - methodname
+  - methodreturntype
+  - attrlist
+
+methodvisibility (IMethod::getVisibility)
+- atributy: style
+- nepárový tag
+
+methodname (IMethod::getName)
+- atributy: style
+- nepárový tag
+
+methodreturntype (IMethod::getType()::getTypeName)
+- atributy: style
+- nepárový tag
+
+relationlist
+- children:
+  - heading
+  - statictext
+  - relation
+
+relation
+- children:
+  - heading
+  - statictext
+  - relationfromclassname
+  - relationtoclassname
+  - relationtype
+  - relationcardinalityfrom
+  - relationcardinalityto
+
+relationfromclassname (IRelation::getStartingClass::?)
+- atributy: style
+- nepárový tag
+
+relationtoclassname (IRelation::getEndingClass::?)
+- atributy: style
+- nepárový tag
+
+relationtype (IRelation::getRelationType)
+- atributy: style
+- nepárový tag
+
+relationcardinalitystartfrom (IRelation::getStartCardinality::getFrom)
+- atributy: style
+- nepárový tag
+
+relationcardinalitystartto (IRelation::getStartCardinality::getTo)
+- atributy: style
+- nepárový tag
+
+relationcardinalityendfrom (IRelation::getEndCardinality::getFrom)
+- atributy: style
+- nepárový tag
+
+relationcardinalityendto (IRelation::getEndCardinality::getTo)
+- atributy: style
+- nepárový tag
+
+
+
+nedoøešeno:
+1) IClassModelModel::getDiagramType - má to cenu zobrazovat?
+2) jak zjistím jméno tøídy, tj. na co mám mapovat <classname /> ?
+
 
 Jak si pøedstavuju, že se to bude parsit
 ----------------------------------------

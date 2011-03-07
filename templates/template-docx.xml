@@ -6,25 +6,65 @@
         <modelimage />
         <classlist>
             <statictext style="format1">Tady zaèíná výpis tøíd. Iterovat se bude pøes item.</statictext>
-            <item>
+            <class>
                 <heading style="format2"><statictext>Tøída </statictext><classname style="format3" /></heading>
+                <statictext>Visibility: </statictext><classvisibility />
+                <anotationlist>
+                    <anotation>
+                        <anotationname />
+                        <anotationattrs>
+                            <anotationattrname />
+                            <anotationattrvaluelist>
+                                <anotationattrvalue />
+                            </anotationattrvaluelist>
+                        </anotationattrs>
+                    </anotation>
+                </anotationlist>
                 <attrlist>
                     <statictext>Tady zaèíná výpis atributù tøídy.</statictext>
-                    <item>
+                    <attribute>
                         <statictext>Jméno atributu: </statictext>
                         <attrname style="format5" />
+                        <statictext>Viditelnost: </statictext>
+                        <attrvisibility />
                         <statictext>Datový typ: </statictext>
                         <attrdatatype style="format6" />
-                    </item>
+                        <anotationlist>
+                            <statictext>Tady taky mùžou být anotace</statictext>
+                        </anotationlist>
+                    </attribute>
                     <statictext>Konec výpisu atributù....</statictext>
                 </attrlist>
                 <methodlist>
                     <statictext>Výpis metod</statictext>
+                    <method>
+                        <methodvisibility />
+                        <methodname />
+                        <methodreturntype />
+                        <attrlist>
+                            <statictext>I metody mají své atributy.</statictext>
+                        </attrlist>
+                    </method>
                 </methodlist>
                 <statictext>No a tady by mohly být vazby k dalším tøídám, ne?</statictext>
                 <statictext>Pøípadnì vyøešené dìdiènosti, kompozice, dekompozice a tyhle h***a.</statictext>
+                <relationlist>
+                    <statictext>Tady budou zmínìny tøídy, ke kterým má tahle nìjaký vztah.</statictext>
+                    <relation>
+                        <statictext>Relace od </statictext>
+                        <relationfromclassname />
+                        <statictext> k </statictext>
+                        <relationtoclassname />
+                        <statictext> typu </statictext>
+                        <relationtype />
+                        <statictext>Vztah typu: </statictext>
+                        <relationcardinalitystartfrom /><statictext>..</statictext><relationcardinalitystartto />
+                        <statictext> - </statictext>
+                        <relationcardinalityendfrom /><statictext>..</statictext><relationcardinalityendto />
+                    </relation>
+                </relationlist>
                 <statictext>Tady konèí výpis tøídy </statictext><classname style="format4" />
-            </item>
+            </class>
             <statictext>Tady konèí výpis tøíd. Je možné na konec pøidat napø. vodorovnou èáru a podobnì.</statictext>
         </classlist>
     </model>
