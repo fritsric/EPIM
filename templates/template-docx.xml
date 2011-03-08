@@ -1,3 +1,9 @@
+<?xml version="1.0"?>
+
+<note xmlns="http://www.w3schools.com"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.w3schools.com templaty.xsd">
+
 <docxtemplate>
     <header>Toto je záhlaví. Bude na všech stránkách dokumentu.</header>
     <footer>Toto je zápatí. Taky bude na všech stránkách. Ten tag by se mìl dát umístit i za uzavírací tag modelu.</footer>
