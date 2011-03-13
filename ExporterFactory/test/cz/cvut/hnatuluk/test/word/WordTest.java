@@ -48,7 +48,7 @@ public class WordTest {
     @Test
     public void testHelloWord() throws Exception {
         WordOutputFactory wof = ExportFactory.getWordFactory();
-        File f = wof.createOutputFile("testFiles/WordFactory/helloWordl.docx");
+        File f = wof.createOutputFile("testFiles/WordFactory/helloWorld.docx");
         WordDocument wd = wof.createOutputWorkbook(f);
         Body b = wd.getDocumentBody();
         ObjectFactory cf = wd.getCreateFactory();
