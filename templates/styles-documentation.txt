@@ -1,0 +1,17 @@
+styletemplate
+- style
+  - name: string
+  - font
+    - family: string
+    - size: number
+    - bold
+    - italics
+    - underline
+    - strike
+  - color: string
+  - align: string
+
+Otázky:
+- jak se bude zapisovat barva, aby to bylo pro generování nejjednodušší?
+
+Any other idea anyone?
