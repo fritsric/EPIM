@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.rsf.ime
+OpenIDE-Module-Localizing-Bundle: org/rsf/ime/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
