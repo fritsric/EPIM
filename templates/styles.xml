@@ -1,4 +1,4 @@
-<styletemplate>
+<styleTemplate>
     <style name="style1">
         <font>
             <family>Verdana</family>
@@ -28,4 +28,4 @@
         <color>red</color>
         <align>justify</align>
     </style>
-</styletemplate>
+</styleTemplate>
