@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="styletemplate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="style" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="style">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="font"/>
+        <xs:element ref="color"/>
+        <xs:element ref="align"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="font">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="family"/>
+        <xs:element ref="size"/>
+        <xs:element ref="bold"/>
+        <xs:element ref="italics"/>
+        <xs:element ref="underline"/>
+        <xs:element ref="strike"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="family" type="xs:string"/>
+  <xs:element name="size" type="xs:integer"/>
+  <xs:element name="bold">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="italics">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="underline">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="strike">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="color" type="xs:NCName"/>
+  <xs:element name="align" type="xs:NCName"/>
+</xs:schema>

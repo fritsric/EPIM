@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="docxTemplate">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="header"/>
+                <xs:element ref="footer"/>
+                <xs:element ref="staticText"/>
+                <xs:element ref="model"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="header">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="staticText"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element> 
+    <xs:element name="footer">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="staticText"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>    
+    </xs:element>
+    <xs:element name="model">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+                <xs:element ref="modelImage"/>
+                <xs:element ref="classList"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="modelImage">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="classList">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+                <xs:element ref="class"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="class">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+                <xs:element ref="heading"/>
+                <xs:element ref="anotationList"/>
+                <xs:element ref="attrList"/>
+                <xs:element ref="classVisibility"/>
+                <xs:element ref="methodList"/>
+                <xs:element ref="relationList"/>
+                <xs:element ref="classname"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="heading">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>                
+                <xs:element ref="classname"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="classVisibility">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="methodList">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>                
+                <xs:element ref="method"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="method">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+                <xs:element ref="methodVisibility"/>
+                <xs:element ref="methodName"/>
+                <xs:element ref="methodReturnType"/>
+                <xs:element ref="attrList"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="methodVisibility">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="methodName">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="methodReturnType">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationList">
+        <xs:complexType>
+            <xs:all>                
+                <xs:element ref="label"/>
+                <xs:element ref="relation"/>            
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relation">
+        <xs:complexType>
+            <xs:all>    
+                <xs:element ref="label"/>
+                <xs:element ref="relationCardinalityEndFrom"/>
+                <xs:element ref="relationCardinalityStartFrom"/>
+                <xs:element ref="relationCardinalityStartTo"/>
+                <xs:element ref="relationFromClassname"/>
+                <xs:element ref="relationToClassname"/>
+                <xs:element ref="relationType"/>
+                <xs:element ref="relationCardinalityEndTo"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationCardinalityEndFrom">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationCardinalityStartFrom">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationCardinalityStartTo">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationFromClassname">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationToClassname">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationType">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="relationCardinalityEndTo">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="classname">
+        <xs:complexType>
+            <xs:all>			
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotationList">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>               
+                <xs:element ref="anotation"/>                
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotation">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+                <xs:element ref="anotationName"/>
+                <xs:element ref="anotationAttrs"/> 
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotationName">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotationAttrs">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+                <xs:element ref="anotationAttrName"/>
+                <xs:element ref="anotationAttrValueList"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotationAttrName">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotationAttrValueList">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>                	
+                <xs:element ref="anotationAttrValue"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="anotationAttrValue">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="attrList">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>                
+                <xs:element ref="attribute"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="attribute">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>                                
+                <xs:element ref="attrName"/>
+                <xs:element ref="attrVisibility"/>
+                <xs:element ref="attrDatatype"/>
+                <xs:element ref="anotationList"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="attrName">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="attrVisibility">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="attrDatatype">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="label"/>
+            </xs:all>
+            <xs:attribute name="style" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="label">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="labelBefore" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="labelAfter" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>	
+    <xs:element name="staticText" type="xs:string"/>
+    <xs:element name="labelBefore" type="xs:string"/>
+    <xs:element name="labelAfter" type="xs:string"/>
+</xs:schema>
