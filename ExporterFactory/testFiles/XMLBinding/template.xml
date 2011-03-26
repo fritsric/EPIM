@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<docxTemplate>
+    <header>
+        <staticText>Text</staticText>
+    </header>
+    <footer>
+        <staticText>Text</staticText>
+    </footer>
+    <staticText>Text</staticText>
+    <model>
+        <modelImage/>
+        <classList>
+            <staticText style="format1">Text</staticText>
+            <class>
+                <heading style="format2">
+                    <staticText>Text</staticText>
+                    <classname style="format3"/>
+                </heading>
+                <staticText>Text</staticText>
+                <classVisibility/>
+                <anotationList>
+                    <anotation>
+                        <anotationName/>
+                        <anotationAttrs>
+                            <anotationAttrName/>
+                            <anotationAttrValueList>
+                                <anotationAttrValue/>
+                            </anotationAttrValueList>
+                        </anotationAttrs>
+                    </anotation>
+                </anotationList>
+                <attrList>
+                    <label>
+                        <labelBefore>Text</labelBefore>
+                    </label>
+                    <attribute>
+                        <label>
+                            <labelBefore>Text</labelBefore>
+                            <labelAfter>Text</labelAfter>
+                        </label>
+                        <attrName style="format5"/>
+                        <attrVisibility/>
+                        <attrDatatype style="format6"/>
+                        <anotationList>
+                            <label>
+                                <labelBefore>Text</labelBefore>
+                            </label>
+                        </anotationList>
+                    </attribute>
+                </attrList>
+                <methodList>
+                    <label>
+                        <labelBefore>Text</labelBefore>
+                    </label>
+                    <method>
+                        <methodVisibility/>
+                        <methodName/>
+                        <methodReturnType/>
+                        <attrList/>
+                    </method>
+                </methodList>
+                <relationList>
+                    <relation>
+                        <relationFromClassname/>
+                        <relationToClassname/>
+                        <relationType/>
+                        <relationCardinalityStartFrom/>
+                        <relationCardinalityStartTo/>
+                        <relationCardinalityEndFrom/>
+                        <relationCardinalityEndTo/>
+                    </relation>
+                </relationList>
+                <classname style="format4"/>
+            </class>
+        </classList>
+    </model>
+</docxTemplate>

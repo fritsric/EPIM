@@ -1,0 +1,31 @@
+<styleTemplate>
+    <style name="style1">
+        <font>
+            <family>Verdana</family>
+            <size>12</size>
+            <bold />
+            <italics />
+        </font>
+        <color>black</color>
+        <align>center</align>
+    </style>
+    <style name="style2">
+        <font>
+            <family>Lucida Console</family>
+            <size>30</size>
+            <italics />
+            <underline />
+            <strike />
+        </font>
+        <color>magenta</color>
+        <align>left</align>
+    </style>
+    <style name="style3">
+        <font>
+            <family>Calibri</family>
+            <size>25</size>
+        </font>
+        <color>red</color>
+        <align>justify</align>
+    </style>
+</styleTemplate>
