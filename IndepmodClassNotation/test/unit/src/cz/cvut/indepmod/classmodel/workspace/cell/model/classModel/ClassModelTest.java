@@ -3,6 +3,9 @@ package cz.cvut.indepmod.classmodel.workspace.cell.model.classModel;
 import cz.cvut.indepmod.classmodel.Common;
 import org.jgraph.graph.DefaultEdge;
 import cz.cvut.indepmod.classmodel.api.ToolChooserModel.Tool;
+import cz.cvut.indepmod.classmodel.api.model.IAnotation;
+import cz.cvut.indepmod.classmodel.api.model.IAttribute;
+import cz.cvut.indepmod.classmodel.api.model.IMethod;
 import cz.cvut.indepmod.classmodel.api.model.IRelation;
 import cz.cvut.indepmod.classmodel.api.model.RelationType;
 import cz.cvut.indepmod.classmodel.workspace.cell.ClassModelCellFactory;
@@ -26,22 +29,22 @@ import static org.junit.Assert.*;
  */
 public class ClassModelTest {
 
-    private ClassModel model;
-    private ClassModel model2;
-    private ClassModel model3;
+    private AbstractElementModel model;
+    private AbstractElementModel model2;
+    private AbstractElementModel model3;
 
     @Before
     public void setUp() {
-        Set<AttributeModel> attributes = new HashSet<AttributeModel>();
+        Set<IAttribute> attributes = new HashSet<IAttribute>();
         attributes.add(new AttributeModel(new TypeModel(Common.TYPE_NAME), Common.ATTRIBUTE_NAME));
         attributes.add(new AttributeModel(new TypeModel(Common.TYPE_NAME2), Common.ATTRIBUTE_NAME2));
         attributes.add(new AttributeModel(new TypeModel(Common.TYPE_NAME), Common.ATTRIBUTE_NAME2));
 
-        Set<MethodModel> methods = new HashSet<MethodModel>();
+        Set<IMethod> methods = new HashSet<IMethod>();
         methods.add(new MethodModel(new TypeModel(Common.TYPE_NAME), Common.METHOD_NAME, null));
         methods.add(new MethodModel(new TypeModel(Common.TYPE_NAME2), Common.METHOD_NAME2, null));
 
-        Set<AnotationModel> anotations = new HashSet<AnotationModel>();
+        Set<IAnotation> anotations = new HashSet<IAnotation>();
         anotations.add(new AnotationModel(Common.ANOT1));
         anotations.add(new AnotationModel(Common.ANOT2));
         anotations.add(new AnotationModel(Common.ANOT3));
@@ -57,7 +60,7 @@ public class ClassModelTest {
 
     @Test
     public void testClassInitialization() {
-        ClassModel m = null;
+        AbstractElementModel m = null;
 
         m = new ClassModel();
         assertTrue(m.getAttributeModels().isEmpty());
@@ -89,7 +92,7 @@ public class ClassModelTest {
     }
 
     /**
-     * Test of toString method, of class ClassModel.
+     * Test of toString method, of class AbstractElementModel.
      */
     @Test
     public void testToString() {
@@ -97,7 +100,7 @@ public class ClassModelTest {
     }
 
     /**
-     * Test of getMethodModels method, of class ClassModel.
+     * Test of getMethodModels method, of class AbstractElementModel.
      */
     @Test
     public void testGetMethodModels() {
@@ -106,7 +109,7 @@ public class ClassModelTest {
     }
 
     /**
-     * Test of getAttributeModels method, of class ClassModel.
+     * Test of getAttributeModels method, of class AbstractElementModel.
      */
     @Test
     public void testGetAttributeModels() {
@@ -122,27 +125,27 @@ public class ClassModelTest {
     }
 
     /**
-     * Test of addAttribute method, of class ClassModel.
+     * Test of addAttribute method, of class AbstractElementModel.
      */
     @Test
     public void testAddAttribute() {
-        ClassModel m = new ClassModel();
+        AbstractElementModel m = new ClassModel();
         assertEquals(0, m.getAttributeModels().size());
 
         m.addAttribute(new AttributeModel(new TypeModel(Common.TYPE_NAME), Common.ATTRIBUTE_NAME));
         assertEquals(1, m.getAttributeModels().size());
 
-        AttributeModel a = m.getAttributeModels().iterator().next();
+        IAttribute a = m.getAttributeModels().iterator().next();
         assertEquals(Common.TYPE_NAME, a.getType().getTypeName());
         assertEquals(Common.ATTRIBUTE_NAME, a.getName());
     }
 
     /**
-     * Test of removeAttribute method, of class ClassModel.
+     * Test of removeAttribute method, of class AbstractElementModel.
      */
     @Test
     public void testRemoveAttribute() {
-        ClassModel m = new ClassModel();
+        AbstractElementModel m = new ClassModel();
         assertEquals(0, m.getAttributeModels().size());
 
         m.addAttribute(new AttributeModel(new TypeModel(Common.TYPE_NAME), Common.ATTRIBUTE_NAME));
@@ -153,11 +156,11 @@ public class ClassModelTest {
     }
 
     /**
-     * Test of removeMethod method, of class ClassModel.
+     * Test of removeMethod method, of class AbstractElementModel.
      */
     @Test
     public void testRemoveMethod() {
-        ClassModel m = new ClassModel(Common.CLASS_NAME);
+        AbstractElementModel m = new ClassModel(Common.CLASS_NAME);
 
         assertEquals(0, m.getMethodModels().size());
 
@@ -175,11 +178,11 @@ public class ClassModelTest {
     }
 
     /**
-     * Test of addMethod method, of class ClassModel.
+     * Test of addMethod method, of class AbstractElementModel.
      */
     @Test
     public void testAddMethod() {
-        ClassModel m = new ClassModel(Common.CLASS_NAME);
+        AbstractElementModel m = new ClassModel(Common.CLASS_NAME);
 
         assertEquals(0, m.getMethodModels().size());
 
@@ -192,7 +195,7 @@ public class ClassModelTest {
 
     @Test
     public void testAddAndRemoveAnotation() {
-        ClassModel m = new ClassModel(Common.CLASS_NAME);
+        AbstractElementModel m = new ClassModel(Common.CLASS_NAME);
 
         AnotationModel anotMod1 = new AnotationModel(Common.ANOT1);
         AnotationModel anotMod2 = new AnotationModel(Common.ANOT2);
@@ -294,9 +297,9 @@ public class ClassModelTest {
     }
 
 
-    private void doAnotationTest(ClassModel cm) {
+    private void doAnotationTest(AbstractElementModel cm) {
         boolean isAnot1 = false, isAnot2 = false, isAnot3 = false;
-        for (AnotationModel anot : model.getAnotations()) {
+        for (IAnotation anot : model.getAnotations()) {
             if (anot.getName().equals(Common.ANOT1)) {
                 isAnot1 = true;
             } else if (anot.getName().equals(Common.ANOT2)) {

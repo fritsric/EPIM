@@ -1,22 +1,25 @@
 package cz.cvut.indepmod.classmodel.persistence.xml;
 
-import cz.cvut.indepmod.classmodel.modelFactory.diagramModel.ClassModelDiagramDataModel;
+import cz.cvut.indepmod.classmodel.diagramdata.DiagramDataModel;
+import cz.cvut.indepmod.classmodel.persistence.xml.delegate.AnotationAtributeModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.AnotationModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.AttributeModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.CardinalityPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.ClassModelDiagramModelPersistenceDelegate;
-import cz.cvut.indepmod.classmodel.persistence.xml.delegate.ClassModelPersistenceDelegate;
+import cz.cvut.indepmod.classmodel.persistence.xml.delegate.AbstractElementlPersistenceDelegate;
+import cz.cvut.indepmod.classmodel.persistence.xml.delegate.HierarchyRelationModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.MethodModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.RelationModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.persistence.xml.delegate.TypeModelPersistenceDelegate;
 import cz.cvut.indepmod.classmodel.workspace.ClassModelGraphModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.ClassModelClassCell;
-import cz.cvut.indepmod.classmodel.workspace.cell.ClassModelRelation;
 import cz.cvut.indepmod.classmodel.workspace.cell.ClassModelVertexView;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AnotationAttributeModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AnotationModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AttributeModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.Cardinality;
-import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.ClassModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AbstractElementModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.HierarchyRelationModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.MethodModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.RelationModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.TypeModel;
@@ -91,7 +94,7 @@ public class ClassModelXMLCoder {
     private ClassModelXMLCoder() {
     }
 
-    public void encode(ClassModelDiagramDataModel diagramModel, OutputStream stream) {
+    public void encode(DiagramDataModel diagramModel, OutputStream stream) {
         XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(stream));
 
         this.initEncoder(encoder);
@@ -99,13 +102,13 @@ public class ClassModelXMLCoder {
         encoder.close();
     }
 
-    public ClassModelDiagramDataModel decode(InputStream stream) {
+    public DiagramDataModel decode(InputStream stream) {
         try {
             XMLDecoder dec = new XMLDecoder(new BufferedInputStream(stream));
             if (dec != null) {
                 Object obj = dec.readObject();
                 dec.close();
-                return (ClassModelDiagramDataModel) obj;
+                return (DiagramDataModel) obj;
             }
         } catch (NoSuchElementException ex) {
             LOG.severe(ex.getMessage());
@@ -123,7 +126,7 @@ public class ClassModelXMLCoder {
             }
         });
 
-        encoder.setPersistenceDelegate(ClassModelDiagramDataModel.class,
+        encoder.setPersistenceDelegate(DiagramDataModel.class,
                 new ClassModelDiagramModelPersistenceDelegate());
 
         //GRAPH LAYOUT CACHE====================================================
@@ -158,25 +161,20 @@ public class ClassModelXMLCoder {
                 new DefaultPersistenceDelegate(
                 new String[]{USER_OBJECT_PROPERTY}));
 
-        encoder.setPersistenceDelegate(ClassModelRelation.class,
-                new DefaultPersistenceDelegate(
-                new String[]{USER_OBJECT_PROPERTY}));
+//        encoder.setPersistenceDelegate(ClassModelRelation.class,
+//                new DefaultPersistenceDelegate(
+//                new String[]{USER_OBJECT_PROPERTY}));
 
-//        encoder.setPersistenceDelegate(DefaultEdge.class,
-//                new DefaultPersistenceDelegate(
-//                new String[]{USER_OBJECT_PROPERTY}));
-//
-//        encoder.setPersistenceDelegate(DefaultPort.class,
-//                new DefaultPersistenceDelegate(
-//                new String[]{USER_OBJECT_PROPERTY}));
 
         //USER OBJECTS AND ITS SUBOBJECTS=======================================
-        encoder.setPersistenceDelegate(ClassModel.class, new ClassModelPersistenceDelegate());
+        encoder.setPersistenceDelegate(AbstractElementModel.class, new AbstractElementlPersistenceDelegate());
         encoder.setPersistenceDelegate(AttributeModel.class, new AttributeModelPersistenceDelegate());
         encoder.setPersistenceDelegate(MethodModel.class, new MethodModelPersistenceDelegate());
         encoder.setPersistenceDelegate(TypeModel.class, new TypeModelPersistenceDelegate());
         encoder.setPersistenceDelegate(RelationModel.class, new RelationModelPersistenceDelegate());
+        encoder.setPersistenceDelegate(HierarchyRelationModel.class, new HierarchyRelationModelPersistenceDelegate());
         encoder.setPersistenceDelegate(AnotationModel.class, new AnotationModelPersistenceDelegate());
+        encoder.setPersistenceDelegate(AnotationAttributeModel.class, new AnotationAtributeModelPersistenceDelegate());
         encoder.setPersistenceDelegate(Cardinality.class, new CardinalityPersistenceDelegate());
 
         //GRAPH VIEWS===========================================================

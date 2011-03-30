@@ -1,5 +1,6 @@
 package cz.cvut.indepmod.classmodel.workspace.cell.model.classModel;
 
+import cz.cvut.indepmod.classmodel.api.model.IAttribute;
 import cz.cvut.indepmod.classmodel.api.model.IMethod;
 import cz.cvut.indepmod.classmodel.api.model.Visibility;
 import java.util.HashSet;
@@ -15,18 +16,22 @@ public class MethodModel extends AbstractModel implements IMethod {
 
     private TypeModel type;
     private String name;
-    private Set<AttributeModel> attributeModels;
+    private Set<IAttribute> attributeModels;
     private Visibility visibility;
 
-    public MethodModel(TypeModel typeModel, String name, Set<AttributeModel> attributeModels) {
-        this.visibility = Visibility.PUBLIC;
+    public MethodModel(TypeModel typeModel, String name, Set<IAttribute> attributeModels) {
+        this(typeModel, name, attributeModels, Visibility.PUBLIC);
+    }
+
+    public MethodModel(TypeModel typeModel, String name, Set<IAttribute> attributeModels, Visibility v) {
+        this.visibility = v;
         this.type = typeModel;
         this.name = name;
 
         if (attributeModels != null) {
-            this.attributeModels = new HashSet<AttributeModel>(attributeModels);
+            this.attributeModels = new HashSet<IAttribute>(attributeModels);
         } else {
-            this.attributeModels = new HashSet<AttributeModel>();
+            this.attributeModels = new HashSet<IAttribute>();
         }
     }
 
@@ -56,9 +61,9 @@ public class MethodModel extends AbstractModel implements IMethod {
      * @return an unmodifiable view of the attributes set
      */
     @Override
-    public Set<AttributeModel> getAttributeModels() {
+    public Set<IAttribute> getAttributeModels() {
         //return Collections.unmodifiableSet(this.attributeModels);
-        return new HashSet<AttributeModel>(this.attributeModels);
+        return new HashSet<IAttribute>(this.attributeModels);
     }
 
     @Override
@@ -72,14 +77,14 @@ public class MethodModel extends AbstractModel implements IMethod {
         bfr.append("(");
 
         boolean comma = false;
-        for (AttributeModel attr : this.getAttributeModels()) {
+        for (IAttribute attr : this.getAttributeModels()) {
             if (comma) {
                 bfr.append(", ");
             } else {
                 comma = true;
             }
             
-            bfr.append(attr.toString());
+            bfr.append(attr.getType());
         }
 
         bfr.append(")");

@@ -1,14 +1,14 @@
 package cz.cvut.indepmod.classmodel.workspace;
 
 import cz.cvut.indepmod.classmodel.actions.ClassModelAbstractAction;
-import cz.cvut.indepmod.classmodel.actions.ClassModelDeleteAction;
-import cz.cvut.indepmod.classmodel.actions.ClassModelEditAction;
+import cz.cvut.indepmod.classmodel.actions.DeleteAction;
+import cz.cvut.indepmod.classmodel.actions.EditAction;
 import cz.cvut.indepmod.classmodel.api.ToolChooserModel;
 import cz.cvut.indepmod.classmodel.api.ToolChooserModelListener;
 import cz.cvut.indepmod.classmodel.api.model.DiagramType;
-import cz.cvut.indepmod.classmodel.modelFactory.diagramModel.ClassModelDiagramDataModel;
+import cz.cvut.indepmod.classmodel.api.model.IElement;
 import cz.cvut.indepmod.classmodel.workspace.cell.ClassModelCellFactory;
-import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.ClassModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AbstractElementModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.TypeModel;
 import org.jgraph.JGraph;
 import org.jgraph.event.GraphSelectionEvent;
@@ -21,56 +21,44 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.jgraph.graph.CellView;
+import org.jgraph.graph.GraphLayoutCache;
 
 public class ClassModelGraph extends JGraph {
 
     private static final Logger LOG = Logger.getLogger(ClassModelGraph.class.getName());
-
-    private Map<String, ClassModelAbstractAction> actions;
+    private Map<Class<? extends ClassModelAbstractAction>, ClassModelAbstractAction> actions;
     private ToolChooserModel selectedTool;
-    private ClassModelDiagramDataModel diagramDataModel;
-
 
     public ClassModelGraph(
-            Map<String, ClassModelAbstractAction> actions,
+            Map<Class<? extends ClassModelAbstractAction>, ClassModelAbstractAction> actions,
             ToolChooserModel selectedTool,
-            ClassModelDiagramDataModel diagramDataModel) {
+            GraphLayoutCache cache) {
+        super(cache);
+
         this.actions = actions;
         this.selectedTool = selectedTool;
-        this.diagramDataModel = diagramDataModel;
 
         this.initActions();
         this.initEventHandling();
         this.setDoubleBuffered(true);
-    }
-
-    //TODO - this could be saved (and updated when model id changed)
-    public Collection<TypeModel> getAllTypes() {
-        Collection<TypeModel> res = new LinkedList<TypeModel>(this.getAllClasses());
-
-        res.addAll(this.diagramDataModel.getStaticDataTypes());
-        return res;
+        this.setAntiAliased(true);
     }
 
     /**
      * Returns collection of all classes that are in the Graph
      * @return Colection of all classes
      */
-    public Collection<ClassModel> getAllClasses() {
-        Collection<ClassModel> res = new LinkedList<ClassModel>();
+    public Collection<IElement> getAllClasses() {
+        Collection<IElement> res = new LinkedList<IElement>();
         CellView[] cw = this.getGraphLayoutCache().getCellViews();
         for (int i = 0; i < cw.length; i++) {
-            DefaultGraphCell cell = (DefaultGraphCell)cw[i].getCell();
+            DefaultGraphCell cell = (DefaultGraphCell) cw[i].getCell();
             Object userObject = cell.getUserObject();
-            if (userObject instanceof ClassModel) {
-                res.add((ClassModel) userObject);
+            if (userObject instanceof AbstractElementModel) {
+                res.add((AbstractElementModel) userObject);
             }
         }
         return res;
-    }
-
-    public DiagramType getDiagramType() {
-        return this.diagramDataModel.getDiagramType();
     }
 
     public void insertCell(Point p) {
@@ -83,29 +71,49 @@ public class ClassModelGraph extends JGraph {
     }
 
     public void selectCell(Object cell) {
-        for (Object selection : this.getSelectionCells()) {
-            this.removeSelectionCell(selection);
+        if (cell == null) {
+
         }
 
+        boolean isAlreadySelected = false;
+        Object[] selectionCells = this.getSelectionCells();
         if (cell != null) {
-            this.setSelectionCell(cell);
+            for (int i = 0; i < selectionCells.length; i++) {
+                Object c = selectionCells[i];
+                if (cell.equals(c)) {
+                    isAlreadySelected = true;
+                    System.arraycopy(selectionCells, i+1, selectionCells, i, selectionCells.length - i - 1);
+                    selectionCells[selectionCells.length - 1] = cell;
+                    this.setSelectionCells(selectionCells);
+                    break;
+                }
+            }
+        }
+
+        if (!isAlreadySelected) {
+            for (Object selection : this.getSelectionCells()) {
+                this.removeSelectionCell(selection);
+            }
+            
+            if (cell != null) {
+                this.setSelectionCell(cell);
+            }
         }
     }
 
     private void initActions() {
         this.actions.put(
-                ClassModelEditAction.ACTION_NAME,
-                new ClassModelEditAction(this)
-        );
+                EditAction.class,
+                new EditAction(this));
 
         this.actions.put(
-                ClassModelDeleteAction.ACTION_NAME,
-                new ClassModelDeleteAction(this));
+                DeleteAction.class,
+                new DeleteAction(this));
     }
-
 
     private void initEventHandling() {
         this.selectedTool.addListener(new ToolChooserModelListener() {
+
             @Override
             public void selectedToolChanged(ToolChooserModel.Tool newTool) {
                 boolean showPorts = false;
@@ -126,11 +134,11 @@ public class ClassModelGraph extends JGraph {
         });
 
         this.addGraphSelectionListener(new GraphSelectionListener() {
+
             @Override
             public void valueChanged(GraphSelectionEvent graphSelectionEvent) {
-                actions.get(ClassModelEditAction.ACTION_NAME).setEnabled(getSelectionCell() != null);
+                actions.get(EditAction.class).setEnabled(getSelectionCell() != null);
             }
         });
     }
-
 }

@@ -34,8 +34,8 @@ public class GeneralizationModelTest {
 
     @Test
     public void testGeneralization() {
-        ClassModel model1 = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
-        ClassModel model2 = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
+        AbstractElementModel model1 = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
+        AbstractElementModel model2 = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
 
         ClassModelClassCell cell1 = new ClassModelClassCell(model1);
         ClassModelClassCell cell2 = new ClassModelClassCell(model2);

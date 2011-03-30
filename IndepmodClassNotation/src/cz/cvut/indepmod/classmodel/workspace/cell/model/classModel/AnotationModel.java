@@ -32,6 +32,7 @@ public class AnotationModel extends AbstractModel implements IAnotation {
         return new ArrayList<IAnotationValue>(this.values);
     }
 
+    @Override
     public void addAttribute(IAnotationValue attr) {
         if (attr != null && !this.values.contains(attr)) {
             this.values.add(attr);

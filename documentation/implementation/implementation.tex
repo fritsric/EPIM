@@ -9,11 +9,16 @@
 \usepackage{dirtree}
 \usepackage{xcolor}
 \usepackage{pifont}
+\usepackage{url}
+\usepackage{aeguill}
+\usepackage{subfigure}
 
 \def\refname{Reference}
 
 \newcommand\luckyparindent{1.2cm}
 \parindent=\luckyparindent
+
+\setcounter{secnumdepth}{5}
 
 %\setlength{\parindent}{1pt}
 %\setlength{\parskip}{1pt plus 1pt minus 0.5pt}
@@ -30,20 +35,103 @@
 
 \section{Introduction}
 
-This document describes the structure of Indepmod Class Notation plugin for Netbeans. The plugin is created in Netbeans platform so if you are not familiar with it, please take a look at \cite{netbeans6.9DevGuide}.
+This bachelor thesis deals with an implementation of Netbeans plugin which will be used for class modeling. I chose this theme because of two main reasons. The first reason is that it is not a standard information system (or something similar) that can be created with no need to learn new technologies (these systems are based on usage of well-known common frameworks). In this project I will learn to work with new frameworks like JGraph (section \ref{section:JGraph}) and Netbeans Platform (section \ref{section:netbeansAPI}). The second reason is that this project can produce an useful system which can be extended e.g. within the scope of another thesis. Of course, the result of one bachelor thesis cannot produce more sophisticated system than the existing (paid) ones, but it provides a good basis for further expansion. 
 
-\section{List of Modules}
+At the beginning I would like to point out that this work is not a recherche one. I didn't try to compare several possible solutions of the problem but I tried to create a solution of the problem. Despite the fact that I have been inspired by several existing systems, these systems are not described in a detail. In this thesis I focused on the description of the implementation and thus it should be easy to implement similar system according to it.
 
-There are three modules in the Indepmod Class Notation plugin:
+The structure of this thesis is divided into two main parts. The first part is called Analysis. This part contains the information about the functionality of the program from the view of the user, a little info about existing solutions that inspired me, used frameworks and some of used design patterns.
+
+The second part is called Application and consists of implementation documentation. In this part there is a description of how the system works inside and of some interesting subsystems.
+
+\subsection{Class Diagram}
+\label{section:classDiagramDescription}
+
+A class diagram is a basic UML\footnote{UML - Unified Modeling Language} diagram. It is probably the best known of all UML diagrams. The class diagram is used for description of system's (or program's) structure by showing its classes and their relations. In a computer engineering, class diagram is used for both conceptual modeling (business modeling) and class modeling on platform level, which is consequently translated into a programming language (into the programming code).
+
+Conceptual modeling is frequently used in early stage of software/system development. Its purpose is to depict the basic ideas of the domain that we want to build (a problem domain). It is why is this model often called Domain Object Model (DOM) or simply domain model. The domain model represents the vocabulary and key features of the problem domain. These features are represented by entities that occur in the problem domain, their attributes and relations between them. This type of model is really useful as a communication tool between several members of business team or between the business and technical team. By this model it can be also verified that the system meets the user's requirements, but only if this model is created well.
+
+Despite the fact that the diagram is called class diagram, it does not describe only the classes of the system. It describes all the data types like interfaces, enumeration types, etc. Concrete types (class, interface, etc.) are distinguished by stereotypes. All these data types are in the class diagram displayed as rectangles. These rectangles can be divided into three parts: 
 \begin{itemize}
-    \item API -  provides an public API (Interfaces) that can be found (e.g. by other Netbeans plugins) in the Lookup of the workspace (part of the Editor module).
-    \item Tool Chooser - is used for setting of demanded Tool of actual selected workspace. The module has a panel with single tools - e.g. Class or Relation between classes. This module will be called only ToolChooser for simplicity.
-    \item Editor - the main module which is used as a workspace. Workspace has a JGraph inside which does all the work.
-    \item JGraph - this module is used as a library wrap for JGraph (it allows other modules to use JGraph framework).
-    \item jGoodiesBinding - this module is used as a library wrap for jGoodiesBinding (this will be probably deleted because I think it is not used anymore).
-\end{itemize} 
+    \item The first part contains the name of the class (or interface, enumeration, etc.) and eventually the stereotype (a text in \guillemotleft angle quotes\guillemotright) which describes a special property (interface, enumeration, or something else). If there is no stereotype, it means that the rectangle represents a simple class.
+    \item The second part contains the list of attributes. Every attribute defines its scope (public, private, protected), name and the data type. There don't have to be all the attributes in this part, but only the important ones.
+    \item The last, third part, contains the list of methods. Every method defines its scope, name, list of parameters and the return value. Again, there can be only methods which are important to depict a concrete problem.
+\end{itemize}
 
-In the Figure \ref{f-screenSmallModule} you can see the print screen of running application. The whole window system (window, menus, etc.) is provided by Netbeans platform. On the left side you can see the project tree, which is the standard component of Netbeans platform (frequently used e.g. in Netbeans IDE). Next to the project tree there is a user interface of Editor module. As you can see on your own, the Editor module provides a workspace where user can create the class model. On the right side there is a UI of Tool Chooser module.
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[]{img/classDiagramExample.png}
+\caption{Example of a class diagram}
+\label{f-classDiagramExample}
+\end{center}
+\end{figure}
+
+Example of a class diagram (on Java platform level) can be seen in the Figure \ref{f-classDiagramExample}. There are two rectangles. First, with name IBarking, represents the interface (it has the \guillemotleft{}interface\guillemotright stereotype). This interface defines one public method with no return type (void) called bark. The second rectangle represents simple class (there is no stereotype) called Dog. The Dog class defines three public attributes (weight of the double type, name of the String type and age of the integer type) and two public methods (pee and bark), both with no return type. Between these two rectangles there is a relationship defining that the Dog class implements the IBarking interface. More information about class diagram can be found in \cite{UMLDistilled}.
+
+\section{Analysis}
+
+The analysis is a very important part of whole project. It helps us to understand what is excepted from the system and how we will try to fulfil these expectations. There are many methodologies for system engineering but you have to do the analysis before you start to write the code no matter which methodology you choose. The analysis doesn't have to be big (especially in an agile methodology) but it has to be there.
+
+\subsection{Environment}
+
+Because this thesis is about the Netbeans plugin creation and Netbeans platform is based on the Java language, there wasn't any other option than use the Java language. But it is not bad at all. Java is widely used object oriented programming language and thanks to its portability, the resulting application can run on a lot of operating systems like Windows, Linux and so on.
+
+As a programming enviroment I use the Netbeans IDE. The Netbeans IDE is the best choice because it is created on the same platform as the plugin is. Netbeans IDE provides the full support (Wizards, etc.) for the Netbeans plugin (or module and whole applications based on this platform) creation. The Netbeans platform is described in section \ref{section:netbeansAPI}.
+
+\subsection{Desired Functionality}
+
+There are a lot of applications that provides the class modeling. Basic appearance is mostly common. There is a space where the model is shown (this space will be called workspace) and some toolbox where user can choose the tool he wants.
+
+An application that inspired me at most was Enterprise Architect from Sparx Systems company. This application does not provide only class modeling functionality, but only this one is important because it is what this thesis deals with. The class modeling in Enterprise Architect has a lot of functionality that cannot be created during a one bachelor thesis. Thus, it has to be decided which functionality will be implemented and which will not.
+
+Every class diagram modeller has to be able to depict the basic elements of the class diagram as were described in section \ref{section:classDiagramDescription}. Existing modellers provides another functionality like information about complexities of single classes, their constraints, statuses, requirements, notes and many others. It is a lot of functionality that can not be created during a one bachelor project but it can be implemented in related projects.
+
+A feature that is not a common one and is implemented in the Indepmod Class Notation Modeller is an annotation list of classes, methods and attributes. Annotations are used in the Java programming language from version 1.5 and in the C\# programming language. Annotations are form of metadata which are stored in the source code. Alternative to annotations are configuration files (very often of XML type) that hold these information. These metadata are often used by frameworks. An example can be the JPA\footnote{JPA - Java Persistence API} framework of Java EE\footnote{Java EE - Java Enterprise Edition} that uses these metadata for the definition of object relation mapping (ORM)\footnote{Object Relation Mapping - a technique that maps objects from object oriented system into tables from relation database}. In a former version of java, these metadata were stored in XML configuration files. When there was a lot of classes to be configured, these configuration files were very large and confusing. On the other hand, annotations allow to specify these configurations inside the classes. This means that if you want to see or edit a class configuration, you don't have to search it in a file with maybe hundreds or thousands lines. Instead, you will open a desired class and find these information there.
+
+\subsubsection{Class Diagram Data Model}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[scale=1]{img/classDiagramMetamodel.png}
+\caption{Class Diagram Metamodel}
+\label{f-classDiagramMetamodel}
+\end{center}
+\end{figure}
+
+Figure \ref{f-classDiagramMetamodel} shows the data model of the class diagram that Indepmod Class Notation uses. Main building block of whole class diagram is the class. Every class has a visibility, a stereotype (which can be empty) and a name. Each class defines a data type identified by its name. In addition to the stereotype and the name, the class has also the list of annotations, attributes and methods.
+
+An attribute has a name, a visibility and represents a data type. This data type can be the data type of a class that we have already created or it can be another else data type (like String or int data type in Java). The attribute can also have several (or none) annotations.
+
+A method is also defined by a name and has a visibility. The attributes owned by the method represents the parameters and the data type represents what the method returns.
+
+An annotation has a name and can have several annotation attributes. Each annotation attribute has the name and a list of values.
+
+\subsection{Used Frameworks}
+
+\subsubsection{Netbeans API}
+\label{section:netbeansAPI}
+
+All desktop applications have several common things. They use for example windows, menus (file, edit, etc.), docking panels, help system, online update system, etc. This functionality can be created over and over again for each new desktop application but it takes a lot of time and effort to create it.
+
+The Netbeans platform is an open source application framework based on well known Swing technology. It can be used to simplify the desktop application development by providing many techniques and design patterns. The Netbeans platform gives the developer a tool to create a robust desktop application much faster and better. Thus, he (or she) can focus on the application's business logic creation instead of dealing with the work that has been already done.
+
+The Netbeans platform can be used either to create the whole desktop application or to create a plugin for yet existing one. Both whole applications and plugins can be consisted of several (or of many) independent modules. The Netbeans platform provides a lot of functionality and if you want to know more about it, please take look at \cite{netbeans6.9DevGuide}.
+
+\subsubsection{JGraph}
+\label{section:JGraph}
+
+JGraph is an opensource graph visualisation library which is based on Java Swing technology. It gives the developer great means to create a generic diagram, which is consisted of nodes and edges. JGraph provides several prefabricated components for graph nodes shapes or for edges shapes that connect these nodes. Of course, there is the possibility to create your own shapes too.
+
+Except the diagram visualisation, JGraph provides some other functionality like zooming of the drawing area, undo/redo support, drag\&drop of nodes and edges and many other. More information about this framework can be found in \cite{jgraphmanual}.
+
+%\subsection{Design Patterns}
+
+%Indepmod Class Notation is created to fulfil the expectations of object oriented programming (OOP) like e.g. encapsulation, separation of interface and implementation and using of design patterns.
+
+%TODO: special MVC modification (like in original Indepmod/Promod) for dialogs? AbstractFactory for Dialog Creation???
+
+\section{Application}
+
+In the Figure \ref{f-screenSmallModule} you can see the print screen of running application. The whole window system (window, menus, etc.) is provided by Netbeans platform. On the left side you can see the project tree, which is the standard component of Netbeans platform (frequently used e.g. in Netbeans IDE). Next to the project tree there is a workspace where user can create and manage his/her class model. On the right side there is a panel, called Tool Chooser, which is used for tool selection (tool for new class addition, etc.).
 
 \begin{figure}[!ht]
 \begin{center}
@@ -53,7 +141,16 @@ In the Figure \ref{f-screenSmallModule} you can see the print screen of running 
 \end{center}
 \end{figure}
 
-Figure \ref{f-Editor_ToolChooser_Components} illustrates the relation between Editor and ToolChooser modules. Editor provides instances of ToolChooserModel and IClassModelModel. These interfaces can be used by other modules. One (and maybe the once) of these modules is ToolChooser which uses ToolChooserModel to set the desired tool of active workspace (Editor module). These interfaces will be described in greater detail in following section.
+Indepmod Class Notation plugin consists of several modules which provides its functionality. The plugin is divided into modules because some parts (e.g. API of the plugin) should be public and some parts shouldn't. Public module means that it can be used in other plugins (or other modules of a plugin). This module division helps to comply with rules of loose coupling and high cohesion. These modules are:
+
+\begin{itemize}
+	\item Editor - the main module of the Indepmod Class Notation plugin. This module takes care about whole class modeling. It handles the workspace and its user interface can be seen in the Figure \ref{f-screenSmallModule} between Project Tree and Tool Chooser panels. The workspace has a JGraph inside which controls whole class modeling.
+    \item API - this module provides a public API (interfaces). Implementations of these interfaces can be found (e.g. by other Netbeans plugins) in the Lookup of the workspace (part of the Editor module). This module is public so it can be used (imported as a library) by any other plugin.
+    \item Tool Chooser - allows the user to choose a tool of actual selected workspace. The user interface of the module is a panel with single tools in it (e.g. a class or a relation between classes).
+    \item JGraph - this module is used as a library wrap for JGraph (it allows other modules to use JGraph framework).
+\end{itemize} 
+
+Figure \ref{f-Editor_ToolChooser_Components} illustrates the relation between Editor and ToolChooser modules. Editor provides instances of ToolChooserModel and IClassModelModel. These interfaces can be used by other plugins/modules. One of these modules is ToolChooser which uses ToolChooserModel to set the desired tool of active workspace (Editor module). These interfaces will be described in detail in following section.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -63,24 +160,25 @@ Figure \ref{f-Editor_ToolChooser_Components} illustrates the relation between Ed
 \end{center}
 \end{figure}
 
-\section{API Module}
+\subsection{API Module}
 
-This module consists of Interfaces which implementations can be found in the lookup of the workspace (workspace is the part of the editor module). There are two packages in this module:
+This module defines interfaces (or classes) whose implementations can be found in the lookup of the workspace (workspace is the part of the editor module). This module is public so it can be used by any other module (or any other plugin). There are two packages in this module:
 
 \begin{itemize}
     \item cz.cvut.indepmod.classmodel.api.model
     \item cz.cvut.indepmod.classmodel.api.toolchooser
 \end{itemize}
 
-\subsection{ClassModel API (cz.cvut.indepmod.classmodel.api.model)}
+\subsubsection{ClassModel API}
+\label{section:classModelAPI}
 
-In this package there are interfaces which can be used to read the Class Model Notation Model. There is an implementation of the IClassModelModel interface in the workspace lookup. This object provides the information about the type of model (business model / class model) and list of Classes from a model. Classes provides the list of annotations, attributes, methods and relations to other classes. And so on with the attributes, etc. 
+This package contains interfaces whose implementation can be used to access the information about class model. Lookup of the workspace contains the implementation of the IClassModelModel interface. This object provides the information about the type of a model (business model / class model) and list of classes from the model (IClass interface). Classes provides the list of annotations (IAnotation interface), attributes (IAttribute interface), methods (IMethod interface) and relations to other classes(IRelation interface). And so on with the attributes, etc. 
 
 Relation between (two) classes is represented by instance of IRelation interface. IClass returns the list of IRelations that belongs to it. IRelation holds information about its type (simple relation, composition, agregation, generalization, implementation) and about what class is at the beginning and at the end of the relation, including cardinalities. 
 
-Cardinalities are represented by instance of ICardinality interface. The ICardinality interface has two methods (getFrom() and getTo()) which return from and to value (both are of integer type). Sign of infinity (e.g. 1..* or *) is treated as -1. In the Table \ref{tab:cardinalityExamples} you can see examples of return values of some cardinalities.
+Cardinalities are represented by instance of ICardinality interface. The ICardinality interface has two methods (getFrom() and getTo()) which return from and to value (both are of integer type). Sign of infinity (e.g. in the 1..* or * cardinality) is treated as -1. In the Table \ref{tab:cardinalityExamples} you can see examples of return values of some cardinalities.
 
-\begin{table}[h]
+\begin{table}[!ht]
 \begin{center}
 \begin{tabular}{|l|c|c|}
 	\hline
@@ -100,21 +198,30 @@ Cardinalities are represented by instance of ICardinality interface. The ICardin
 \end{center}
 \end{table}
 
-TODO: Image with structure (tree)
+The ClassModel API can be treated as a tree. The root node of the tree is IClassModelModel instance whose children are classes, etc. You can see an example of a class diagram in the Figure \ref{f-classApiTree_model} and its tree representation in the Figure \ref{f-classApiTree_tree}.
 
-%The interface structure can be seen in the Figure \ref{f-ModuleAPIClassModelModelInterface}.
+\begin{figure}[!ht]
+\begin{center}
+\subfigure[A class diagram]{
+\includegraphics[scale=1]{img/classModelAPITree_model.png}
+\label{f-classApiTree_model}
+}
+\subfigure[A tree representing the class diagram]{
+\includegraphics[scale=1]{img/classModelAPITree_tree.png}
+\label{f-classApiTree_tree}
+}
+\caption{Example of ClassModel API Tree}
+\label{f-classApiTree}
+\end{center}
+\end{figure}
 
-%\begin{figure}[!ht]
-%\begin{center}
-%\includegraphics[width=\textwidth]{img/ModuleAPIClassModelModelInterface.png}
-%\caption{Class Diagram of ClassModel API package}
-%\label{f-ModuleAPIClassModelModelInterface}
-%\end{center}
-%\end{figure}
+\subsubsection{ToolChooser API}
 
-\subsection{ToolChooser API (cz.cvut.indepmod.classmodel.api.toolchooser)}
+The main part of this module is ToolChooserModel class. Instance of this class represents the actual selected tool. ToolChooserModel implements the Observer design pattern so you can register your listener which will be called anytime the model changes.
 
-This package is used by both ToolChooser and Editor modules. Workspace (part of Editor Module) has an instance of ToolChooserModel in it's lookup. ToolChooser uses this instance (from the lookup of active workspace) to set the desired tool (e.g. new class). Structure is really simple and you can see it in the Figure \ref{f-ModuleAPIToolChooserModel}.
+This package is used by both ToolChooser and Editor modules. Workspace (part of Editor Module) has an instance of ToolChooserModel in it's lookup. This means that Editor module leaves the tool selection on someone else.
+
+ToolChooser uses this instance (from the lookup of active workspace) to set the desired tool (e.g. new class).  But it is also possible to make another plugin that will do this (e.g. in the toolbar). Structure of this package is really simple and you can see it in the Figure \ref{f-ModuleAPIToolChooserModel}.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -124,9 +231,11 @@ This package is used by both ToolChooser and Editor modules. Workspace (part of 
 \end{center}
 \end{figure}
 
-\section{ToolChooser Module}
+\subsection{ToolChooser Module}
 
-This module is used for setting of demanded tool of active workspace. The structure can be seen in the Figure \ref{f-ToolChooserModuleToolChooser}.
+This module is used for setting of demanded tool of active workspace. The user interface of this module can be seen in the screen shot of the running application (Figure \ref{f-screenSmallModule}).
+
+ToolChooser searches for instance of the ToolChooserModel in the lookup of active workspace (Editor module). When the instance is found, ToolChooser can set its tool (new class, new relation, etc.). This means that it can be used to set the desired tool of that workspace. The structure of this module can be seen in the Figure \ref{f-ToolChooserModuleToolChooser}.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -136,40 +245,39 @@ This module is used for setting of demanded tool of active workspace. The struct
 \end{center}
 \end{figure}
 
-ToolChooser is a singleton which is inherited from the TopComponent class. TopComponent is provided by Netbeans platform. Its ancestors can be used as a user interface (component that is visible to the user) in the application. TopComponent is derived from standard JComponent class (javax.swing) and adds many methods which can be used for controlling a window (more info in \cite{netbeans6.9DevGuide} in chapter called Window System).
+ToolChooser is a singleton which is inherited from the TopComponent class. TopComponent is provided by Netbeans platform. It is derived from standard JComponent class (javax.swing) and adds many methods which can be used for controlling a window. Ancestors of TopComponent class can be used as a user interface (component that is visible to the user) in the Netbeans platform application. More info can be found in \cite{netbeans6.9DevGuide} in chapter called Window System).
 
-ToolChooser searches for instance of the ToolChooserModel in the lookup of active workspace (Editor module). When the instance is found, ToolChooser can set its tool (class, relation, etc.). This means that it can be used to set the desired tool of that workspace.
+In the layer.xml file there is set the action for opening the ToolChooser (in running application can be accessed in menu Windows \ding{221} Tool Chooser). Layer.xml is a configuration file of the Netbeans platform, which is provided by modules. Content of this file defines new folders and files which will be inserted into the system filesystem (a central registry) when the module is loaded. The system filesystem is a virtual filesystem, which is used for Netbeans platform settings. For example there are some folders that are used for Window System API (window positions, etc.) or Actions API (e.g. actions in the menu) configuration. More info about this can be found in \cite{netbeans6.9DevGuide} in the chapter 3, called Window System.
 
-In the layer.xml file there is set the action for opening the ToolChooser (Windows \ding{221} Tool Chooser).
+\subsection{Editor Module}
 
-\section{Editor Module}
+This is the fundamental module whose purpose is to create a workspace which provides the class modeling. For graphical part of class modeling is used framework JGraph (\url{http://www.jgraph.com}). More info about JGraph framework can be found in \cite{jgraphmanual}.
 
-This is the fundamental module whose purpose is to create a workspace where user can create a class model. For class modeling is used framework JGraph (http://www.jgraph.com/). More info about JGraph framework can be found in \cite{jgraphmanual}.
+\subsubsection{Module Structure}
+\label{section:editorModuleStructure}
 
-\subsection{Module Structure}
-
-Main class (part of the cz.cvut.indepmod.classmodel.workspace package), which comprises the workspace, is the ClassModelWorkspace. Thus, if you want to study the code, you should start right here. ClassModelWorkspace is extended from the TopComponent. This class is responsible for whole initialisation. It creates:
+Main class (part of the cz.cvut.indepmod.classmodel.workspace package), which comprises the workspace, is the ClassModelWorkspace. Thus, if you want to study the code, you should start right here. ClassModelWorkspace is extended from the TopComponent. This class is responsible for whole initialization. It creates:
 \begin{itemize}
     \item ClassModelGraph - this class is extended from JGraph and represents the class model graph to the user. Instance of this class is situated inside the ClassModelWorkspace component (JGraph is also derived from JComponent)
-    \item ClassModelModel - Implementation of IClassModelModel which returns the list of classes that are in the class model and the type of the diagram (class or business model).
-    \item ClassModelMarqueeHandler - this class is responsible for handling of user inputs that are made inside the ClassModelGraph.
+    \item ClassModelModel - Implementation of IClassModelModel which returns the list of classes that are in the class model and the type of the diagram (class or business model). The purpose of IClassModelModel interface is described in the section \ref{section:classModelAPI}.
+    \item ClassModelMarqueeHandler - this class is responsible for user input handling which is made inside the ClassModelGraph.
 \end{itemize}
 
 ClassModelWorkspace is simply JComponent (TopComponent) which has the JGraph inside. JGraph presents the class model to the user. There are cells (representing classes) which are related together by edges (representing relations).
 
 In next section I will try to describe the implementation of the Editor Module. I Will start from the initialization and after that I will try to explain every part that is created during the initialization.
 
-\subsection{Editor Module Initialisation}
+\subsubsection{Editor Module Initialisation}
 
-As I have already said before, the ClassModelWorkspace class do the initialization of the whole module. There are two cases of initialization. The first case, when user creates new class diagram, and the second, when user opens an existing file. Both cases are very similar. They differ only in the way of ClassModelDiagramDataModel initialization. For this purpose there are two constructor variants.
+As I have already said before, the ClassModelWorkspace class does the initialization of the whole module. There are two cases of initialization. The first case, when user creates new class diagram, and the second, when user opens an existing model from file. Both cases are very similar. They differ in the way of ClassModelDiagramDataModel initialization. For this purpose there are two constructor variants.
 
-The first, non parametric, is used when the new class diagram (with no associated file) is created. This constructor creates new instance of ClassModelDiagramDataModel by ClassModelDiagramModelFactory.
+The first, non parametric, constructor is used when the new class diagram (with no associated file) is created. This constructor calls the ClassModelDiagramModelFactory which creates new instance of ClassModelDiagramDataModel and returns it.
 
 The second constructor is used when the user opens a file with a class model. It accepts an instance of ClassModelXMLDataObject (one parameter). This object represents the file in which is the class model saved (more in the chapter \ref{subsection:fileAssociation}). The constructor gets the input stream of that file and asks the ClassModelXMLCoder to decode its content. ClassModelXMLCoder decodes it and returns ClassModelDiagramDataModel instance filled according to that file's content. ClassModelXMLCoder is part of the persistence layer and will be discussed in the chapter \ref{subsection:persistence}.
 
 ClassModelDiagramDataModel class represents the data which has to be persisted when user want to save his class diagram. At present, instance of this class holds the GraphLayoutCache instance (class of JGraph framework which holds the information about cells in the graph), list of static data types (default list of data types for certain language which is chosen during new class diagram file creation) and the type of the diagram (class or business model, it is also chosen during new file creation).
 
-After the ClassModelDiagramDataModel is gained (created or loaded) the initialization is the same. What the ClassModelWorkspace creates have been already written up. For better understanding you can see the sequence diagram in the Figure \ref{f-ClassModelWorkspaceInicializationSimple} which shows the initialisation of new ClassModelWorkspace. For simplicity there is only what ClassModelWorkspace creates. The processes inside these classes are not shown (Sequence diagram would have been really big) but it will be discussed later.
+After the ClassModelDiagramDataModel is gained (created or loaded) the initialization is the same. What the ClassModelWorkspace creates have been already written up in chapter \ref{section:editorModuleStructure}. For better understanding you can see the sequence diagram in the Figure \ref{f-ClassModelWorkspaceInicializationSimple} which shows the initialisation of new ClassModelWorkspace. For simplicity there is only what ClassModelWorkspace creates. The processes inside these classes are not shown (Sequence diagram would have been really big) but the process of creation will be discussed later.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -179,16 +287,9 @@ After the ClassModelDiagramDataModel is gained (created or loaded) the initializ
 \end{center}
 \end{figure}
 
-\subsection{Netbeans File Association}
-\label{subsection:fileAssociation}
+\subsubsection{ClassModelGraph implementation}
 
-Netbeans platform allows its plug-ins to recognize new types of files. So when you want to associate new file type with your plugin, you can do it easily. If you are not familiar with this, you can find it in the \cite{netbeans6.9DevGuide} in the chapter called Data System.
-
-The file type association settings can be found in layer.xml file. This file is used for settings of Netbeans module. At present there is settings of file type association and settings of wizard that can be used to create new class diagram file. In this wizard user sets the name of the file, type of the diagram and the language (Java, C++, etc.). Files that are associated with this plugin are xml files with .cls suffix. Content of the file will be discussed later.
-
-\subsection{ClassModelGraph implementation}
-
-ClassModelGraph is extended from JGraph and adds some functionality for Class manipulation. Added methods are:
+ClassModelGraph is extended from JGraph, which provides a lot of useful functionality (more on this can be found in \cite{jgraphmanual}). ClasModelGraph adds some functionality for class manipulation. This added functionality is shown in following list.
 \begin{itemize}
     \item insertCell(Point p) - creates new cell on desired position according to the selected tool (in ToolChooserModel). Usage of this function is shown in the section \ref{subsection:apiImplementation} in Figure \ref{f-ClassCreationSequenceDiagram}.
 
@@ -197,9 +298,29 @@ ClassModelGraph is extended from JGraph and adds some functionality for Class ma
     \item getAllTypes() - returns the list of all data types in the diagram. In addition to the classes (the class is a data type) there are also static data types (like String or int in Java).
 \end{itemize} 
 
-For event handling in the graph (ClassModelGraph) there is the ClassModelMarqueeHandler. Instance of this class is created in the ClassModelWorkspace and is added into the ClassModelGraph instance. Purpose of this class is to handle all user inputs in the ClassModelGraph (in the canvas of the graph) and control the popup menu (JPopupMenu and its content). When user does an action (e.g. click with mouse), the ClassModelMarqueeHandler will find out if it is a control click (e.g. cell selection), new cell addition, edge (line between cells) addition and so on. This class is also responsible for rendering of the temporary line when user creates new edge.
+To handle events in the graph (ClassModelGraph) there is the ClassModelMarqueeHandler. Instance of this class is created in the ClassModelWorkspace and is added into the ClassModelGraph instance. Purpose of this class is to handle all user inputs in the ClassModelGraph (in the canvas of the graph) and control the popup menu (JPopupMenu and its content). When user does an action (e.g. click with mouse), the ClassModelMarqueeHandler will find out if it is a control click (e.g. cell selection), new cell addition, edge (line between cells) addition and so on. This class is also responsible for rendering of the temporary line when user creates new edge.
 
-\subsection{ClassModel API implementation}
+\subsubsection{JGraph class cell rendering}
+
+In this section I will explain how I render the classes (the rectangles with the class name and lists of annotations, attributes and methods) into the JGraph workspace. But first a little theory remind. JGraph uses MVC pattern for cell rendering. Cells (the model of cell) in JGraph are represented by DefaultGraphCell (or its subclasses). DefaultGraphCell implementation stores the user object and an attribute map. The user object is an object which is associated with the cell. The Cell uses its method toString to render the name of the cell, so in most cases this object is an instance of String. But it can be any other object which can store another information about the cell. The attribute map is used when you want to set the appearance of the cell.
+
+All graph cell has an associated view (VertexView implementation). This VertexView implementation associates the renderer, editor and cell handle\footnote{Cell handle is what appears when the cell is selected (e.g mouse click) and what allows to resize it.} together for a cell (DefaultGraphCell implementation). The cell and the view is associated together by CellViewFactory which returns a cell view for a particular cell. More on this theme can be found in \cite{jgraphmanual}.
+
+JGraph basically supports rendering of basic shapes like rectangles, ovals and so on. When you want to render your own shape, you have to create your own cell view (VertexView), renderer (CellViewRenderer) and CellViewFactory implementation.
+
+So this is what I did. I created ClassModelCellViewFactory which is derived from JGraph's DefaultCellViewFactory and overrides it's method createVertexView(Object o). If the object in the parameter is instance of ClassModelClassCell class, the method returns new instance of ClassModelVertexView (derived from JGraph's VertexView). Otherwise the method returns the default view (calls its parent's method). ClassModelVertexView returns instance of ClassModelVertexRenderer which is derived from VertexRenderer. ClassModelVertexRenderer overrides its method getRendererComponent. This method returns new instance of ClassComponent. ClassComponent is extended from JComponent and renders the class according to the ClassModel user object.
+
+These classes can be found in the package cz.cvut.indepmod.classmodel.workspace.cell. Instance of ClassModelCellViewFactory is inserted into the GraphLayoutCache during the workspace initialisation. You can see the class diagram in the Figure \ref{f-ClassModelVertexStructure}.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=\textwidth]{img/ClassModelVertexStructure.png}
+\caption{Structure of classes which render the class cell}
+\label{f-ClassModelVertexStructure}
+\end{center}
+\end{figure}
+
+\subsubsection{ClassModel API implementation}
 \label{subsection:apiImplementation}
 
 Implementation classes of ClassModel API (its interfaces are in the API Module) are situated in the cz.cvut.indepmod.classmodel.cell.model.classmodel package. Main problem I had to deal with was to design where to store the data of the ClassModel.
@@ -216,25 +337,62 @@ So problem is solved. Some information like the name are stored inside the User 
 \end{center}
 \end{figure}
 
-\subsection{JGraph class cell rendering}
+\subsubsection{Forms}
 
-In this section I will explain how I render the class (the rectangle with the class name and lists of annotations, attributes and methods) into the JGraph workspace. But first a little theory remind. JGraph uses MVC pattern for cell rendering. Cells (the model of cell) in JGraph are represented by DefaultGraphCell (or its subclasses). DefaultGraphCell implementation stores the user object and an attribute map inside which is used when you want to set the appearance of that cell. All graph cell has an associated view (VertexView implementation). This VertexView implementation associates the renderer, editor and cell handle together for an cell (DefaultGraphCell implementation). The cell and view is associated together by CellViewFactory which returns a cell view for a particular cell. More on this theme can be found in \cite{jgraphmanual}.
+Forms (most of them are dialogs) of the Indepmod Class Notation plugin is created on Swing technology. Their classes are located in cz.cvut.indepmod.classmodel.frames.dialogs package.
 
-JGraph basically supports rendering of basic shapes like rectangles, ovals and so on. When you want to render your own shape, you have to create your own cell view (VertexView), renderer (CellViewRenderer) and CellViewFactory implementation.
+Every form uses the special case of MVC\footnote{MVC - Model View Controller} design pattern. Standard MVC design pattern has three single components:
+ \begin{itemize}
+    \item a model - represents the data that is processed. It can be e.g. a class instance that holds this data.
+    \item a view - presents the data to the user. It is e.g. a form with single components but it does not have to be only the form. It can be also an image or a chart. The view holds the pointer to its model so it can be refreshed when there is a change in the model.
+    \item a controller - has a pointer to both the view and the model. It performs an action when user does something (e.g. click on a button in a view) and updates the values in the model.
+\end{itemize}
 
-So this is exactly what I did. I created ClassModelCellViewFactory which is derived from JGraph's DefaultCellViewFactory and overrides it's method createVertexView(Object o). If the object in the parameter is instance of ClassModelClassCell class, the method returns new instance of ClassModelVertexView (derived from JGraph's VertexView). Otherwise the method returns the default view (calls its parent's method). ClassModelVertexView returns statically instantiated ClassModelVertexRenderer which is derived from VertexRenderer and overrides its method getRendererComponent(...). This method returns new instance of ClassComponent if the User Object of the cellView (argument) is of ClassModel type. ClassComponent is extended from JComponent and renders the class according to the ClassModel user object.
+The MVC pattern in this project is slightly different. The view and the controller are not separated but the view is an predecessor of the controller. It is done so because it is not expected to change the view for another else. This does not violate the rule of encapsulation and in addition, the form elements (text fields, buttons, etc.) can be in the view created with protected visibility. It means that the controller can manage these elements directly.
 
-These classes can be found in the package cz.cvut.indepmod.classmodel.workspace.cell. Instance of ClassModelCellViewFactory is inserted into the GraphLayoutCache during the workspace initialisation. You can see the class diagram in the Figure \ref{f-ClassModelVertexStructure}.
+For better view of the MVC design pattern you can take a look at the Figures \ref{f-classDiagStdMVC} and \ref{f-classDiagIndepmodMVC} where is shown the principle of this design pattern. Detailed info about this design pattern can be found in \cite{DesignPatterns}.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=\textwidth]{img/ClassModelVertexStructure.png}
-\caption{Structure of classes which render the class cell}
-\label{f-ClassModelVertexStructure}
+\subfigure[Standard MVC Design Pattern]{
+\includegraphics[scale=1]{img/MVCStandard.png}
+\label{f-classDiagStdMVC}
+}
+\subfigure[MVC Design Pattern used in the Indepmod Class Notation]{
+\includegraphics[scale=1]{img/MVCOfIndepmod.png}
+\label{f-classDiagIndepmodMVC}
+}
+\caption{Class diagrams of MVC Design patterns}
+\label{f-classDiagMVC}
 \end{center}
 \end{figure}
 
-\subsection{Persistence}
+Another design pattern that some forms use is the Abstract Factory in conjunction with Template method. Usage of this design pattern was necessary because Indepmod Class Notation creates two types of diagrams - class and business diagram. The class diagram lets the user edit all elements of classes (attributes, annotations, methods) but the business diagram lets the user edit only the attributes. When user make the action to edit the class, Indepmod Class Notation shows appropriate dialog according to the type of the model.
+
+Forms that are based on this design pattern are forms for class edition and attribute creation. In this thesis I will explain only the principle of the form for class edition. The form for attribute creation is analogous.
+
+The form for class edition of the business diagram is defined by BusinessModelEditClassDialog class and the form for class edition of the class diagram is defined by ClassModelEditClassDialog. These dialogs have many things in common. This is why they have a common predecessors. These predecessors looks like any other dialog except that they are abstract\footnote{Abstract class - it can't create its instances}. These abstract predecessors are AbstractEditClassDialogView (a view) and AbstractEditClassDialog (a controller). 
+
+The abstract view is able to create the whole UI for class diagram class edition. Component initialization is divided into several protected methods. These methods creates single parts of the UI. Their names are: 
+
+\begin{itemize}
+    \item initClassNamePanel - creates the panel for name and stereotype edition
+    \item initAnotationPanel - creates the panel for annotation edition
+    \item initAttributePanel - creates the panel for attribute edition
+    \item initMethodPanel - creates the panel for method edition
+\end{itemize}
+
+These methods are treated as template methods so they can be overrode. The abstract controller behaves like any other controller of this program.
+
+The BusinessModelEditClassDialog is extended from the abstract controller and overrides methods that creates annotation and method panels. It overrides them in a way that it returns an null pointer. The abstract view compose its UI of these parts and when a part is null, it is not added there. The ClassModelEditClassDialog does not override any method because all desired functionality is done in its predecessors.
+
+These dialogs are created by an Abstract Factory. The Abstract Factory design consists of three parts. The first part is an abstract class (the abstract factory). This class defines the interface for concrete classes and a static method that returns an implementation of concrete factory. The second part is consisted of these concrete factories. Their responsibility is to create single components according to the interface of the abstract factory. The third part is consisted of components which are created by these concrete factories.
+
+TODO - The image of abstract factory.
+
+The Abstract Factory is situated in the cz.cvut.indepmod.classmodel.frames.dialogs.factory package and is called AbstractDialogFactory. It has a static method which accepts the type of the diagram and returns an instance of a concrete factory. This concrete factory creates the dialog. Please take a look at the javadoc of this project for more information about the names of methods, etc. For more information about the Abstract Factory design pattern take a look at the \cite{DesignPatterns}.
+
+\subsubsection{Persistence}
 \label{subsection:persistence}
 
 Persistence layer implementation is situated in the cz.cvut.indepmod.classmodel.persistence.xml package. There is a ClassModelXMLCoder class that is created as a singleton. Instance of this class is responsible for encoding and decoding the ClassModelDiagramDataModel instance into or from a stream (InputStream or OutputStream). Its method for encoding, encode(ClassModelDiagramDataModel model, OutputStream stream), is called by SaveCookie (discussed in the section \ref{subsection:lookup}).
@@ -243,10 +401,17 @@ ClassModelXMLCoder uses java.beans.XMLEncoder and java.beans.XMLDecoder. This cr
 
 If you want to know more about how XMLEncoder or XMLDecoder works, please take a look at \cite{usingXMLEncoder}.
 
-\subsection{Lookup}
+\subsubsection{Netbeans File Association}
+\label{subsection:fileAssociation}
+
+Netbeans platform allows its plugins to recognize new types of files. So when you want to associate new file type with your plugin, you can do it easily. If you are not familiar with this, you can find it in \cite{netbeans6.9DevGuide} in the chapter called Data System.
+
+The file type association settings can be found in layer.xml file. At present there is settings of file type association and settings of wizard that can be used to create new class diagram file. In this wizard user sets the name of the file, type of the diagram and the language (Java, C++, etc.). Files that are associated with this plugin are XML files with .cls suffix. Content of these files will be discussed later.
+
+\subsubsection{Lookup}
 \label{subsection:lookup}
 
-Lookup is (in Netbeans platform) a technique to join more plugins together with loose coupling. On the module level, lookups enable to register a service by its provider and find the service by its consumer. On the level of single components (TopComponent), lookups enable to exchange data between this component (provider) and consumers. More reading about this can be found in \cite{netbeans6.9DevGuide} in the chapter called Lookup.
+Lookup is (in Netbeans platform) a technique to join more plugins together with loose coupling. On the module level, lookups enable to register a service by its provider and find the service by its consumer in a central repository. On the level of single components (TopComponent), lookups enable to exchange data between this component (provider) and consumers. The main difference between lookup on the module level (service registry) and lookup on the component level is that component does not provide its data by a central registry but by its own lookup object. More reading about this can be found in \cite{netbeans6.9DevGuide} in the chapter called Lookup.
 
 Editor Module uses the Lookup on the component level. ClassModelWorkspace creates its Lookup during the initialization. It adds there an instance of ToolChooserModel and an instance of ClassModelModel.
 
@@ -254,9 +419,9 @@ ToolChooserModel instance is used by ToolChooser Module to set the desired tool.
 
 ClassModelModel instance implements the IClassModelModel interface and can be also used by other plugins. It provides the Class Model API to the outside world. Thanks to this there can be for example another plugin that will generate the code from the class model of this module.
 
-When user does any change into the model (add new class, new relation between classes, change the attribute of the class or something similar), ClassModelWorkspace inserts an SaveCookie instance into its Lookup. This tells the Netbeans platform that this component is changed and can be saved (save action in File menu is enabled). When user calls this action, the SaveCookie tells the ClassModelXMLCoder to save the GraphLayoutCache into the associated file. When it is done, this SaveCookie implementation is removed from the Lookup, so the Netbeans platform knows that the component does not have to be saved.
+When user does any change into the model (add new class, new relation between classes, change the attribute of the class or something similar), ClassModelWorkspace inserts a SaveCookie instance into its Lookup. This tells the Netbeans platform that this component is changed and can be saved (save action in File menu is enabled). When user calls this action, the SaveCookie tells the ClassModelXMLCoder to save the GraphLayoutCache into the associated file. When it is done, this SaveCookie implementation is removed from the Lookup, so the Netbeans platform knows that the component does not have to be saved.
 
-\subsection{Package Structure}
+\subsubsection{Package Structure}
 
 You can see the package structure in this directory tree:
 \renewcommand*\DTstylecomment{\rmfamily\color{black}\textsc}
@@ -284,15 +449,19 @@ You can see the package structure in this directory tree:
 \parindent=\luckyparindent
 
 \begin{thebibliography}{9}
-\bibitem{jgraphmanual}{\it{JGraph 5 manual}, found at \texttt{http://www.jgraph.com/downloads/jgraph/jgraphmanual.pdf}}
+\bibitem{jgraphmanual}{\it{JGraph 5 manual} [online]. 2009-09-25 [cit. 2011-03-03]. Available from WWW: \url{http://www.jgraph.com/downloads/jgraph/jgraphmanual.pdf}.}
 
 \bibitem{netbeans6.9DevGuide}{PETRI, Jürgen. \it{NetBeans Platform 6.9 	Developer's Guide}. Birmingham : Packt Publishing Ltd., 2010. 273 s. ISBN 978-1-849511-76-6}
 
-\bibitem{usingXMLEncoder}{MILNE, Philip. Sun Developer Network [online]. c2010 [cit. 2011-01-29]. Using XMLEncoder. Available from WWW: <http://java.sun.com/products/jfc/tsc/articles/persistence4/>.}
+\bibitem{usingXMLEncoder}{MILNE, Philip. \it{Sun Developer Network} [online]. 2010 [cit. 2011-01-29]. Using XMLEncoder. Available from WWW: \url{http://java.sun.com/products/jfc/tsc/articles/persistence4/}.}
 
-\bibitem{netbeansWebNewFileTemplate}{http://platform.netbeans.org/tutorials/60/nbm-filetemplates.html}
+\bibitem{netbeansWebNewFileTemplate}{\it{Netbeans Platform} [online]. 2005-06-26, 2008-04-15 [cit. 2011-03-03]. NetBeans File Template Module Tutorial. Available from WWW: \url{http://platform.netbeans.org/tutorials/60/nbm-filetemplates.html}.}
 
-\bibitem{netbeansWebWizardNewFile}{http://blogs.sun.com/geertjan/entry/creating\_a\_better\_java\_class} %Wizard for creation of new file
+\bibitem{netbeansWebWizardNewFile}{\it{Creating a Better Java Class Wizard} [online]. 2008-04-02 [cit. 2011-03-03]. Geertjan's Blog. Available from WWW: \url{http://blogs.sun.com/geertjan/entry/creating_a_better_java_class}.} %Wizard for creation of new file
+
+\bibitem{UMLDistilled}{FOWLER, Martin. \it{Destilované UML}. Prague : Grada Publishing, a.s., 2009. 176 p. ISBN 978-80-247-2062-3.}
+
+\bibitem{DesignPatterns}{PECINOVSKÝ, Rudolf. \it{Návrhové Vzory}. Brno : Computer Press, a.s., 2007. 527 p. ISBN 978-80-251-1582-4.}
 \end{thebibliography}
 
 \end{document}

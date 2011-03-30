@@ -37,6 +37,7 @@ public class TypeModel extends AbstractModel implements IType {
      * Change the name of this data type
      * @param typeName new name of this data type
      */
+    @Override
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
@@ -44,5 +45,27 @@ public class TypeModel extends AbstractModel implements IType {
     @Override
     public String toString() {
         return this.typeName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TypeModel other = (TypeModel) obj;
+        if ((this.typeName == null) ? (other.typeName != null) : !this.typeName.equals(other.typeName)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.typeName != null ? this.typeName.hashCode() : 0);
+        return hash;
     }
 }

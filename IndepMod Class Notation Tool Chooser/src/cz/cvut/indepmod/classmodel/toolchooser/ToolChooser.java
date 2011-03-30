@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.swing.Action;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -57,8 +56,6 @@ public class ToolChooser extends ToolChooserView {
         return modes;
     }
 
-
-
     public ToolChooserModel getModel() {
         return model;
     }
@@ -106,8 +103,6 @@ public class ToolChooser extends ToolChooserView {
         super.open();
     }
 
-
-    
     @Override
     protected void componentClosed() {
         this.modelLookup.removeLookupListener(this.toolChooserLookupLsnr);
@@ -141,6 +136,24 @@ public class ToolChooser extends ToolChooserView {
             public void actionPerformed(ActionEvent e) {
                 LOG.fine("addClass tool choosed");
                 model.setSelectedTool(ToolChooserModel.Tool.TOOL_ADD_CLASS);
+            }
+        });
+
+        this.addInterfaceButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LOG.fine("addInterface tool choosed");
+                model.setSelectedTool(ToolChooserModel.Tool.TOOL_ADD_INTERFACE);
+            }
+        });
+
+        this.addEnumerationButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LOG.fine("addEnumeration tool choosed");
+                model.setSelectedTool(ToolChooserModel.Tool.TOOL_ADD_ENUMERATION);
             }
         });
 
@@ -227,6 +240,12 @@ public class ToolChooser extends ToolChooserView {
                 case TOOL_ADD_CLASS:
                     addClassButton.doClick();
                     break;
+                case TOOL_ADD_INTERFACE:
+                    addInterfaceButton.doClick();
+                    break;
+                case TOOL_ADD_ENUMERATION:
+                    addEnumerationButton.doClick();
+                    break;
                 case TOOL_ADD_RELATION:
                     addRelationButton.doClick();
                     break;
@@ -238,8 +257,10 @@ public class ToolChooser extends ToolChooserView {
                     break;
                 case TOOL_ADD_GENERALIZATION:
                     addGeneralizationButton.doClick();
+                    break;
                 case TOOL_ADD_REALISATION:
                     addRealisationButton.doClick();
+                    break;
                 default:
                     LOG.severe("Unknown tool was selected!");
             }

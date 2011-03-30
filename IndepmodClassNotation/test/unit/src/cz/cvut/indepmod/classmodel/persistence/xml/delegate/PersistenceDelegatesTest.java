@@ -1,10 +1,11 @@
 package cz.cvut.indepmod.classmodel.persistence.xml.delegate;
 
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.ClassModel;
 import cz.cvut.indepmod.classmodel.Common;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AnotationModel;
 import java.util.Set;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AttributeModel;
-import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.ClassModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AbstractElementModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.MethodModel;
 import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
@@ -37,7 +38,7 @@ public class PersistenceDelegatesTest {
 
         try {
             this.encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(f)));
-            this.encoder.setPersistenceDelegate(ClassModel.class, new ClassModelPersistenceDelegate());
+            this.encoder.setPersistenceDelegate(AbstractElementModel.class, new AbstractElementlPersistenceDelegate());
             this.encoder.setPersistenceDelegate(TypeModel.class, new TypeModelPersistenceDelegate());
             this.encoder.setPersistenceDelegate(AttributeModel.class, new AttributeModelPersistenceDelegate());
             this.encoder.setPersistenceDelegate(MethodModel.class, new MethodModelPersistenceDelegate());
@@ -76,17 +77,17 @@ public class PersistenceDelegatesTest {
     }
 
     /**
-     * This test tries to encode, decode and verify ClassModel class
+     * This test tries to encode, decode and verify AbstractElementModel class
      */
     @Test
     public void testClassModelEncodeDecode() {
-        ClassModel cm = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
-        ClassModel dcm = null;
+        AbstractElementModel cm = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
+        AbstractElementModel dcm = null;
 
         this.encoder.writeObject(cm);
         this.encoder.close();
 
-        dcm = (ClassModel) this.decode(this.f);
+        dcm = (AbstractElementModel) this.decode(this.f);
 
         assertEquals(Common.CLASS_NAME, dcm.getTypeName());
         assertEquals(3, dcm.getAttributeModels().size());
