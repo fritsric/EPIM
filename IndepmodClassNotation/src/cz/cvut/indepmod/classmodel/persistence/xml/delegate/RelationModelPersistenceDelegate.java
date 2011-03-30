@@ -21,7 +21,4 @@ public class RelationModelPersistenceDelegate extends DefaultPersistenceDelegate
                 "new",
                 new Object[]{model.getRelationType()});
     }
-
-
-
 }

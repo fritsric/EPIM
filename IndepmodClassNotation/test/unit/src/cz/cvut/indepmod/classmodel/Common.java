@@ -1,5 +1,8 @@
 package cz.cvut.indepmod.classmodel;
 
+import cz.cvut.indepmod.classmodel.api.model.IAnotation;
+import cz.cvut.indepmod.classmodel.api.model.IAttribute;
+import cz.cvut.indepmod.classmodel.api.model.IMethod;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AnotationModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AttributeModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.MethodModel;
@@ -33,13 +36,13 @@ public class Common {
     public static final String INT_NAME = "int";
     public static final String SINGLETON_NAME = "singleton";
     public static final String COUNT_NAME = "count";
-    private static Set<AttributeModel> atts = null;
-    private static Set<MethodModel> methods = null;
-    private static Set<AnotationModel> anotations = null;
+    private static Set<IAttribute> atts = null;
+    private static Set<IMethod> methods = null;
+    private static Set<IAnotation> anotations = null;
 
-    public static Set<AttributeModel> getAttributes() {
+    public static Set<IAttribute> getAttributes() {
         if (atts == null) {
-            atts = new HashSet<AttributeModel>();
+            atts = new HashSet<IAttribute>();
             atts.add(new AttributeModel(new TypeModel(Common.TYPE_NAME), Common.ATTRIBUTE_NAME));
             atts.add(new AttributeModel(new TypeModel(Common.TYPE_NAME2), Common.ATTRIBUTE_NAME2));
             atts.add(new AttributeModel(new TypeModel(Common.TYPE_NAME), Common.ATTRIBUTE_NAME2));
@@ -48,9 +51,9 @@ public class Common {
         return atts;
     }
 
-    public static Set<MethodModel> getMethods() {
+    public static Set<IMethod> getMethods() {
         if (methods == null) {
-            methods = new HashSet<MethodModel>();
+            methods = new HashSet<IMethod>();
             methods.add(new MethodModel(new TypeModel(Common.TYPE_NAME), Common.METHOD_NAME, null));
             methods.add(new MethodModel(new TypeModel(Common.TYPE_NAME2), Common.METHOD_NAME2, null));
         }
@@ -58,9 +61,9 @@ public class Common {
         return methods;
     }
 
-    public static Set<AnotationModel> getAnotations() {
+    public static Set<IAnotation> getAnotations() {
         if (anotations == null) {
-            anotations = new HashSet<AnotationModel>();
+            anotations = new HashSet<IAnotation>();
             anotations.add(new AnotationModel(Common.ANOT1));
             anotations.add(new AnotationModel(Common.ANOT2));
             anotations.add(new AnotationModel(Common.ANOT3));

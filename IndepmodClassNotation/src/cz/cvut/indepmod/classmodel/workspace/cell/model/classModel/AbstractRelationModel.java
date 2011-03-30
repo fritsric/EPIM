@@ -1,6 +1,6 @@
 package cz.cvut.indepmod.classmodel.workspace.cell.model.classModel;
 
-import cz.cvut.indepmod.classmodel.api.model.IClass;
+import cz.cvut.indepmod.classmodel.api.model.IElement;
 import cz.cvut.indepmod.classmodel.api.model.IRelation;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
@@ -20,39 +20,56 @@ public abstract class AbstractRelationModel extends AbstractModel implements IRe
 
     protected DefaultEdge cell;
 
+    private String name;
+
     public AbstractRelationModel() {
         this.cell = null;
+        this.name = null;
     }
 
     public void setCell(DefaultEdge cell) {
         this.cell = cell;
     }
 
+    public DefaultEdge getCell() {
+        return cell;
+    }
+
     @Override
-    public IClass getStartingClass() {
+    public IElement getStartingClass() {
         this.verifyCell();
 
         DefaultPort p = (DefaultPort) this.cell.getSource();
         DefaultGraphCell c = (DefaultGraphCell) p.getParent();
-        IClass clazz = (IClass) c.getUserObject();
+        IElement clazz = (IElement) c.getUserObject();
 
         return clazz;
     }
 
     @Override
-    public IClass getEndingClass() {
+    public IElement getEndingClass() {
         this.verifyCell();
 
         DefaultPort p = (DefaultPort) this.cell.getTarget();
         DefaultGraphCell c = (DefaultGraphCell) p.getParent();
-        IClass clazz = (IClass) c.getUserObject();
+        IElement clazz = (IElement) c.getUserObject();
 
         return clazz;
     }
 
     @Override
+    public String getRelationName() {
+        return this.name;
+    }
+
+    @Override
+    public void setRelationName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public String toString() {
-        return "";
+        return this.name;
     }
 
     private void verifyCell() {

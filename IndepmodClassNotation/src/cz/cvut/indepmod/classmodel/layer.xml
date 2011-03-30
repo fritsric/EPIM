@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
+    <folder name="Actions">
+        <folder name="Indepmod">
+            <file name="cz-cvut-indepmod-classmodel-actions-nbfolders-EditElementAction.instance">
+                <attr name="delegate" methodvalue="org.openide.awt.Actions.inject"/>
+                <attr name="displayName" bundlevalue="cz.cvut.indepmod.classmodel.actions.nbfolders.Bundle#CTL_EditElementAction"/>
+                <attr name="injectable" stringvalue="cz.cvut.indepmod.classmodel.actions.nbfolders.EditElementAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.context"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="type" stringvalue="cz.cvut.indepmod.classmodel.actions.nbfolders.EditElementCookie"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Shortcuts">
+        <file name="D-E.shadow">
+            <attr name="originalFile" stringvalue="Actions/Indepmod/cz-cvut-indepmod-classmodel-actions-nbfolders-EditElementAction.instance" />
+        </file>
+    </folder>
     <folder name="Loaders">
         <folder name="text">
             <folder name="IndepModClassNotation">
@@ -64,6 +82,7 @@
                 </folder>
                 <folder name="Factories">
                     <file name="ClassModelXMLDataLoader.instance">
+                        <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/cz/cvut/indepmod/classmodel/file/class-diagram.gif"/>
                         <attr name="dataObjectClass" stringvalue="cz.cvut.indepmod.classmodel.file.ClassModelXMLDataObject"/>
                         <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
                         <attr name="mimeType" stringvalue="text/IndepModClassNotation"/>

@@ -1,5 +1,6 @@
 package cz.cvut.indepmod.classmodel.workspace.cell.model.classModel;
 
+import cz.cvut.indepmod.classmodel.api.model.ICardinality;
 import cz.cvut.indepmod.classmodel.api.model.RelationType;
 
 /**
@@ -15,15 +16,16 @@ public class HierarchyRelationModel extends AbstractRelationModel {
 
     public HierarchyRelationModel(RelationType type) {
         this.type = type;
+        this.cell = null;
     }
 
     @Override
-    public Cardinality getStartCardinality() {
+    public ICardinality getStartCardinality() {
         return Cardinality.ONE;
     }
 
     @Override
-    public Cardinality getEndCardinality() {
+    public ICardinality getEndCardinality() {
         return Cardinality.ONE;
     }
 
@@ -31,6 +33,5 @@ public class HierarchyRelationModel extends AbstractRelationModel {
     public RelationType getRelationType() {
         return this.type;
     }
-
 
 }

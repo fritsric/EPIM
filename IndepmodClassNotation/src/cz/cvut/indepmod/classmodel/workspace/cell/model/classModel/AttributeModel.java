@@ -17,15 +17,19 @@ public class AttributeModel extends AbstractModel implements IAttribute {
 
     private TypeModel type;
     private String name;
-    private List<AnotationModel> anotations;
+    private List<IAnotation> anotations;
     private Visibility visibility;
 
     public AttributeModel(TypeModel typeModel, String name) {
-        this.visibility = Visibility.PUBLIC;
+        this(typeModel, name, Visibility.PUBLIC);
+    }
+
+    public AttributeModel(TypeModel typeModel, String name, Visibility visibility) {
+        this.visibility = visibility;
         this.type = typeModel;
         this.name = name;
 
-        this.anotations = new ArrayList<AnotationModel>();
+        this.anotations = new ArrayList<IAnotation>();
     }
 
     /**
@@ -56,6 +60,14 @@ public class AttributeModel extends AbstractModel implements IAttribute {
         res.append(this.name);
         res.append(" : ");
         res.append(this.type.getTypeName());
+
+        if (!this.anotations.isEmpty()) {
+            res.append(" [");
+            for (IAnotation anot : this.anotations) {
+                res.append(anot.toString());
+            }
+            res.append("]");
+        }
         return res.toString();
     }
 
@@ -64,13 +76,15 @@ public class AttributeModel extends AbstractModel implements IAttribute {
         return new ArrayList<IAnotation>(this.anotations);
     }
 
-    public void addAnotation(AnotationModel anot) {
-        if (anot != null && ! this.anotations.contains(anot)) {
+    @Override
+    public void addAnotation(IAnotation anot) {
+        if (anot != null && !this.anotations.contains(anot)) {
             this.anotations.add(anot);
         }
     }
 
-    public void removeAnotation(AnotationModel anot) {
+    @Override
+    public void removeAnotation(IAnotation anot) {
         this.anotations.remove(anot);
     }
 

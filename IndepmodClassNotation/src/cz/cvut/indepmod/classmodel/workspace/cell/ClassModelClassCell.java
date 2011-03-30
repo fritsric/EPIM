@@ -1,6 +1,6 @@
 package cz.cvut.indepmod.classmodel.workspace.cell;
 
-import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.ClassModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AbstractElementModel;
 import javax.swing.tree.MutableTreeNode;
 import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultGraphCell;
@@ -11,8 +11,8 @@ import org.jgraph.graph.DefaultGraphCell;
  * @author Lucky
  *
  * This class is special case of DefaultGraphCell which is created to insert
- * ClassModel instance as a User object. User Object does not implicitly know
- * who is its cell (DefaultGraphInstance). But ClassModel instance need to know
+ * AbstractElementModel instance as a User object. User Object does not implicitly know
+ * who is its cell (DefaultGraphInstance). But AbstractElementModel instance need to know
  * this because it provides its relations by asking the cell for its relations.
  */
 public class ClassModelClassCell extends DefaultGraphCell {
@@ -44,14 +44,14 @@ public class ClassModelClassCell extends DefaultGraphCell {
 
 
     /**
-     * If the object in the parameter is ClassModel instance, set its cell
-     * pointer to this object. ClassModel user object needs to know to which
+     * If the object in the parameter is AbstractElementModel instance, set its cell
+     * pointer to this object. AbstractElementModel user object needs to know to which
      * cell it belongs because it returns relations according to this cell.
-     * @param o Object, which could be the ClassModel insance
+     * @param o Object, which could be the AbstractElementModel insance
      */
     private void initUserObjectPointer(Object o) {
-        if (o instanceof ClassModel) {
-            ClassModel cm = (ClassModel) o;
+        if (o instanceof AbstractElementModel) {
+            AbstractElementModel cm = (AbstractElementModel) o;
             cm.setCell(this);
         }
     }

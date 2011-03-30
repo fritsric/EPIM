@@ -12,8 +12,6 @@ import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.Port;
 import cz.cvut.indepmod.classmodel.workspace.cell.ClassModelClassCell;
 import org.jgraph.graph.DefaultPort;
-import java.util.HashSet;
-import java.util.Set;
 import cz.cvut.indepmod.classmodel.api.model.RelationType;
 import org.junit.After;
 import org.junit.Before;
@@ -36,8 +34,8 @@ public class RelationModelTest {
 
     @Test
     public void testRelation() {
-        ClassModel model = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
-        ClassModel model2 = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
+        AbstractElementModel model = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
+        AbstractElementModel model2 = new ClassModel(Common.CLASS_NAME, Common.getMethods(), Common.getAttributes(), Common.getAnotations());
         
         ClassModelClassCell cell1 = new ClassModelClassCell(model);
         ClassModelClassCell cell2 = new ClassModelClassCell(model2);

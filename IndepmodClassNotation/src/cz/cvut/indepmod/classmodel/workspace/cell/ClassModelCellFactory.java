@@ -4,7 +4,9 @@ import cz.cvut.indepmod.classmodel.api.ToolChooserModel;
 import cz.cvut.indepmod.classmodel.api.model.RelationType;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.Cardinality;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.ClassModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.EnumerationModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.HierarchyRelationModel;
+import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.InterfaceModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.RelationModel;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
@@ -34,6 +36,14 @@ public class ClassModelCellFactory {
             case TOOL_ADD_CLASS:
                 cell = new ClassModelClassCell();
                 cell.setUserObject(new ClassModel());
+                break;
+            case TOOL_ADD_INTERFACE:
+                cell = new ClassModelClassCell();
+                cell.setUserObject(new InterfaceModel());
+                break;
+            case TOOL_ADD_ENUMERATION:
+                cell = new ClassModelClassCell();
+                cell.setUserObject(new EnumerationModel());
                 break;
             default:
                 LOG.severe("Unknown selected tool");
@@ -93,7 +103,8 @@ public class ClassModelCellFactory {
 
         //GraphConstants.setEndFill(edge.getAttributes(), true);
         GraphConstants.setLineStyle(edge.getAttributes(), GraphConstants.STYLE_ORTHOGONAL);
-        GraphConstants.setLabelAlongEdge(edge.getAttributes(), false);
+        GraphConstants.setLabelAlongEdge(edge.getAttributes(), true);
+        GraphConstants.setLabelPosition(edge.getAttributes(), new Point2D.Double(GraphConstants.PERMILLE/2, 10));
         GraphConstants.setEditable(edge.getAttributes(), false);
         GraphConstants.setMoveable(edge.getAttributes(), true);
         GraphConstants.setDisconnectable(edge.getAttributes(), false);

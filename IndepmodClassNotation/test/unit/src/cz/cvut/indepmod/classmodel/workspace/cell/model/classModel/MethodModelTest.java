@@ -6,6 +6,7 @@
 package cz.cvut.indepmod.classmodel.workspace.cell.model.classModel;
 
 import cz.cvut.indepmod.classmodel.Common;
+import cz.cvut.indepmod.classmodel.api.model.IAttribute;
 import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
@@ -54,9 +55,9 @@ public class MethodModelTest {
     @Test
     public void testGetAttributeModels() {
         assertNotNull(model.getAttributeModels());
-        Set<AttributeModel> atr = model.getAttributeModels();
+        Set<IAttribute> atr = model.getAttributeModels();
         assertEquals(3, atr.size());
-        for (AttributeModel a : atr) {
+        for (IAttribute a : atr) {
             assertNotNull(a);
         }
     }

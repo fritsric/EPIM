@@ -18,4 +18,10 @@ public interface IType {
      */
     public String getTypeName();
 
+    /**
+     * Sets the type name
+     * @param name new type name
+     */
+    public void setTypeName(String name);
+
 }

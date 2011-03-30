@@ -24,7 +24,7 @@ public interface IMethod {
      *
      * @return an unmodifiable view of the attributes set
      */
-    public Set<? extends IAttribute> getAttributeModels();
+    public Set<IAttribute> getAttributeModels();
 
     /**
      * Returns the name of the method

@@ -5,16 +5,7 @@
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>cz.cvut.indepmod.classmodel.api</code-name-base>
             <suite-component/>
-            <module-dependencies>
-                <dependency>
-                    <code-name-base>org.jgoodies.binding</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-            </module-dependencies>
+            <module-dependencies/>
             <public-packages>
                 <package>cz.cvut.indepmod.classmodel.api</package>
                 <package>cz.cvut.indepmod.classmodel.api.model</package>

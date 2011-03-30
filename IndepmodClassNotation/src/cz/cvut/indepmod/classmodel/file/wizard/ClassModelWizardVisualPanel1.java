@@ -1,5 +1,6 @@
 package cz.cvut.indepmod.classmodel.file.wizard;
 
+import cz.cvut.indepmod.classmodel.resources.Resources;
 import cz.cvut.indepmod.classmodel.util.GridBagConstraintsUtils;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,10 +17,10 @@ import javax.swing.JTextField;
  */
 public class ClassModelWizardVisualPanel1 extends JPanel {
 
-    public static final String NAME_LABEL_TEXT = "Name: ";
-    public static final String TYPE_LABEL_TEXT = "Model Type: ";
-    public static final String CLASS_MODEL_RADIO_TEXT = "Class Model";
-    public static final String BUSINESS_MODEL_RADIO_TEXT = "Business Model";
+    public static final String NAME_LABEL_TEXT = Resources.getString("new_file_wizard_panel1_name_label");
+    public static final String TYPE_LABEL_TEXT = Resources.getString("new_file_wizard_panel1_model_type_label");
+    public static final String CLASS_MODEL_RADIO_TEXT = Resources.getString("new_file_wizard_panel1_class_model_label");
+    public static final String BUSINESS_MODEL_RADIO_TEXT = Resources.getString("new_file_wizard_panel1_business_model_label");
 
     private JLabel nameLabel = new JLabel(NAME_LABEL_TEXT);
     private JLabel typeLabel = new JLabel(TYPE_LABEL_TEXT);

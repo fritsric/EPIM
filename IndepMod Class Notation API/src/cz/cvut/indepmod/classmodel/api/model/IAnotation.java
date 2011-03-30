@@ -27,4 +27,10 @@ public interface IAnotation {
      */
     public Collection<IAnotationValue> getAttributes();
 
+    /**
+     * Adds an atribute to this anotation
+     * @param attr new attribute to be added
+     */
+    public void addAttribute(IAnotationValue attr);
+
 }

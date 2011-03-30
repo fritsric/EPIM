@@ -16,6 +16,8 @@ public class ToolChooserModel {
 
     public static final String TOOL_CONTROL_NAME = "control";
     public static final String TOOL_ADD_CLASS_NAME = "class";
+    public static final String TOOL_ADD_INTERFACE_NAME = "interface";
+    public static final String TOOL_ADD_ENUMERATION_NAME = "enumeration";
     public static final String TOOL_ADD_RELATION = "relation";
     public static final String TOOL_ADD_GENERALIZATION = "generalization";
     public static final String TOOL_ADD_REALISATION = "realisation";
@@ -25,6 +27,8 @@ public class ToolChooserModel {
     public static enum Tool {
         TOOL_CONTROLL,
         TOOL_ADD_CLASS,
+        TOOL_ADD_INTERFACE,
+        TOOL_ADD_ENUMERATION,
         TOOL_ADD_RELATION,
         TOOL_ADD_GENERALIZATION,
         TOOL_ADD_REALISATION,
