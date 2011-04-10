@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <docxTemplate>
     <header>
-        <staticText>Text</staticText>
+        <staticText>Text v záhlaví</staticText>
     </header>
     <footer>
-        <staticText>Text</staticText>
+        <staticText>Text v zápatí</staticText>
     </footer>
-    <staticText>Text</staticText>
+    <staticText>Text 1</staticText>
     <model>
         <modelImage/>
         <classList>
-            <staticText style="format1">Text</staticText>
+            <staticText style="format1">Text 2</staticText>
             <class>
                 <heading style="format2">
-                    <staticText>Text</staticText>
+                    <staticText>Text 3</staticText>
                     <classname style="format3"/>
                 </heading>
-                <staticText>Text</staticText>
+                <staticText>Text 4</staticText>
                 <classVisibility/>
                 <anotationList>
                     <anotation>
@@ -31,26 +31,26 @@
                 </anotationList>
                 <attrList>
                     <label>
-                        <labelBefore>Text</labelBefore>
+                        <labelBefore>Text 5</labelBefore>
                     </label>
                     <attribute>
                         <label>
-                            <labelBefore>Text</labelBefore>
-                            <labelAfter>Text</labelAfter>
+                            <labelBefore>Text 6</labelBefore>
+                            <labelAfter>Text 7</labelAfter>
                         </label>
                         <attrName style="format5"/>
                         <attrVisibility/>
                         <attrDatatype style="format6"/>
                         <anotationList>
                             <label>
-                                <labelBefore>Text</labelBefore>
+                                <labelBefore>Text 8</labelBefore>
                             </label>
                         </anotationList>
                     </attribute>
                 </attrList>
                 <methodList>
                     <label>
-                        <labelBefore>Text</labelBefore>
+                        <labelBefore>Text 9</labelBefore>
                     </label>
                     <method>
                         <methodVisibility/>
