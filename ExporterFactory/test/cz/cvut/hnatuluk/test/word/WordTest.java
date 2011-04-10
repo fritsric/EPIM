@@ -4,6 +4,7 @@
  */
 package cz.cvut.hnatuluk.test.word;
 
+import Exporter.DocxExporter;
 import cz.cvut.hnatuluk.factories.ExportFactory;
 import cz.cvut.hnatuluk.factories.WordFactory.WordDocument;
 import cz.cvut.hnatuluk.factories.WordFactory.WordOutputFactory;
@@ -31,6 +32,11 @@ import org.junit.Test;
  * @author Lukáš Hnaťuk ČVUT FEL 2010
  */
 public class WordTest {
+    @Test
+    public void testDocxExporter() throws Exception {
+        DocxExporter lrExporter = new DocxExporter("testFiles/XMLBinding/template.xml", "testFiles/WordFactory/exportertest.docx", null);
+        lrExporter.Export();
+    }
 
     @Test
     public void testCrateFactory() throws Exception {
