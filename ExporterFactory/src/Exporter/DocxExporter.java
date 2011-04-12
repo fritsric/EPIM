@@ -22,7 +22,6 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.wml.Body;
@@ -250,13 +249,13 @@ public class DocxExporter {
                 } else if (lsNodeName.equals("heading")) {
                     //ParseHeading(lrClass, lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("anotationList")) {
-                    ParseAnotationList((Set<IAnotation>) lrClass.getAnotations(), lrCurrentNode.getChildNodes());
+                    ParseAnotationList((Collection<IAnotation>) lrClass.getAnotations(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("attrList")) {
-                    ParseAttrList((Set<IAttribute>) lrClass.getAttributeModels(), lrCurrentNode.getChildNodes());
+                    ParseAttrList((Collection<IAttribute>) lrClass.getAttributeModels(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("classVisibility")) {
-                    OutputSingleRow("Viditelnost: " + lrClass.getVisibility());
+                    OutputSingleRow(lrClass.getVisibility().toString());
                 } else if (lsNodeName.equals("methodList")) {
-                    ParseMethodList((Set<IMethod>) lrClass.getMethodModels(), lrCurrentNode.getChildNodes());
+                    ParseMethodList((Collection<IMethod>) lrClass.getMethodModels(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("relationList")) {
                     ParseRelationList((Collection<IRelation>) lrClass.getRelatedClass(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("classname")) {
@@ -271,7 +270,7 @@ public class DocxExporter {
      * @param irAnotationList
      * @param irNodes 
      */
-    private void ParseAnotationList(Set<IAnotation> irAnotationList, NodeList irNodes)
+    private void ParseAnotationList(Collection<IAnotation> irAnotationList, NodeList irNodes)
     {
         if(irAnotationList == null)
             return;
@@ -297,7 +296,7 @@ public class DocxExporter {
      * @param irAnotationList
      * @param irNodes 
      */
-    private void ParseAnotation(Set<IAnotation> irAnotationList, NodeList irNodes)
+    private void ParseAnotation(Collection<IAnotation> irAnotationList, NodeList irNodes)
     {
         if(irAnotationList == null)
             return;
@@ -388,7 +387,7 @@ public class DocxExporter {
      * @param irAttributes
      * @param irNodes 
      */
-    private void ParseAttrList(Set<IAttribute> irAttributes, NodeList irNodes)
+    private void ParseAttrList(Collection<IAttribute> irAttributes, NodeList irNodes)
     {
         if(irAttributes == null)
             return;
@@ -414,7 +413,7 @@ public class DocxExporter {
      * @param irAttributes
      * @param irNodes 
      */
-    private void ParseAttributes(Set<IAttribute> irAttributes, NodeList irNodes)
+    private void ParseAttributes(Collection<IAttribute> irAttributes, NodeList irNodes)
     {
         if(irAttributes == null)
             return;
@@ -435,10 +434,10 @@ public class DocxExporter {
                     OutputSingleRow(lrAttribute.getName());
                 } else if (lsNodeName.equals("attrVisibility")) {
                     OutputSingleRow(lrAttribute.getVisibility().toString());
-                } else if (lsNodeName.equals("attrDataType")) {
+                } else if (lsNodeName.equals("attrDatatype")) {
                     OutputSingleRow(lrAttribute.getType().getTypeName());
                 } else if (lsNodeName.equals("anotationList")) {
-                    ParseAnotationList((Set<IAnotation>) lrAttribute.getAnotations(), lrCurrentNode.getChildNodes());
+                    ParseAnotationList((Collection<IAnotation>) lrAttribute.getAnotations(), lrCurrentNode.getChildNodes());
                 }
             }
         }
@@ -449,7 +448,7 @@ public class DocxExporter {
      * @param irMethodList
      * @param irNodes 
      */
-    private void ParseMethodList(Set<IMethod> irMethodList, NodeList irNodes)
+    private void ParseMethodList(Collection<IMethod> irMethodList, NodeList irNodes)
     {
         if(irMethodList == null)
             return;
@@ -475,7 +474,7 @@ public class DocxExporter {
      * @param irMethodList
      * @param irNodes 
      */
-    private void ParseMethods(Set<IMethod> irMethodList, NodeList irNodes)
+    private void ParseMethods(Collection<IMethod> irMethodList, NodeList irNodes)
     {
         if(irMethodList == null)
             return;
@@ -499,7 +498,7 @@ public class DocxExporter {
                 } else if (lsNodeName.equals("methodReturnType")) {
                     OutputSingleRow(lrMethod.getType().getTypeName());
                 } else if (lsNodeName.equals("attrList")) {
-                    ParseAttrList((Set<IAttribute>) lrMethod.getAttributeModels(), lrCurrentNode.getChildNodes());
+                    ParseAttrList((Collection<IAttribute>) lrMethod.getAttributeModels(), lrCurrentNode.getChildNodes());
                 }
             }
         }

@@ -5,9 +5,14 @@
 package cz.cvut.hnatuluk.test.word;
 
 import Exporter.DocxExporter;
+import Exporter.TestAtribute;
+import Exporter.TestClass;
+import Exporter.TestClassModelModel;
+import Exporter.TestType;
 import cz.cvut.hnatuluk.factories.ExportFactory;
 import cz.cvut.hnatuluk.factories.WordFactory.WordDocument;
 import cz.cvut.hnatuluk.factories.WordFactory.WordOutputFactory;
+import cz.cvut.indepmod.classmodel.api.model.Visibility;
 import java.io.File;
 import java.math.BigInteger;
 import org.docx4j.wml.Body;
@@ -35,6 +40,25 @@ import org.junit.Test;
  * @author Lukáš Hnaťuk ČVUT FEL 2010
  */
 public class WordTest {
+    @Test
+    public void TestWithData() throws Exception
+    {
+        TestClassModelModel lrModel = new TestClassModelModel();
+        TestClass lrClass1 = new TestClass();
+        lrClass1.fsTypeName = "Můj typ 1";
+        lrClass1.frVisibility = Visibility.PROTECTED;
+        lrClass1.frAttributes.add(
+                new TestAtribute(Visibility.PRIVATE, "jméno atributu 1", new TestType("můj typ 1"), null));
+
+        lrModel.frClasses.add(lrClass1);
+
+        DocxExporter lrExporter = new DocxExporter(
+                "testFiles/XMLBinding/template.xml",
+                "testFiles/WordFactory/exportertestwithdata.docx",
+                lrModel);
+        lrExporter.Export();
+    }
+    
     @Test
     public void testList() throws Exception
     {

@@ -6,21 +6,21 @@
     <footer>
         <staticText>Text v zápatí</staticText>
     </footer>
-    <staticText>Text 1</staticText>
+    <staticText>Tohle je můj super model.</staticText>
     <model>
         <modelImage/>
         <classList>
-            <staticText style="format1">Text 2</staticText>
+            <staticText style="format1">Seznam tříd</staticText>
             <class>
-                <heading style="format2">
-                    <staticText>Text 3</staticText>
-                    <classname style="format3"/>
-                </heading>
-                <staticText>Text 4</staticText>
+                <staticText>Třída </staticText>
+                <classname style="format4"/>
+                <staticText>Viditelnost:</staticText>
                 <classVisibility/>
                 <anotationList>
+                    <staticText>Seznam anotací:</staticText>
                     <anotation>
                         <anotationName/>
+                        <staticText>Atributy:</staticText>
                         <anotationAttrs>
                             <anotationAttrName/>
                             <anotationAttrValueList>
@@ -30,28 +30,17 @@
                     </anotation>
                 </anotationList>
                 <attrList>
-                    <label>
-                        <labelBefore>Text 5</labelBefore>
-                    </label>
+                    <staticText>Seznam atributů:</staticText>
                     <attribute>
-                        <label>
-                            <labelBefore>Text 6</labelBefore>
-                            <labelAfter>Text 7</labelAfter>
-                        </label>
                         <attrName style="format5"/>
                         <attrVisibility/>
                         <attrDatatype style="format6"/>
                         <anotationList>
-                            <label>
-                                <labelBefore>Text 8</labelBefore>
-                            </label>
                         </anotationList>
                     </attribute>
                 </attrList>
                 <methodList>
-                    <label>
-                        <labelBefore>Text 9</labelBefore>
-                    </label>
+                    <staticText>Seznam metod:</staticText>
                     <method>
                         <methodVisibility/>
                         <methodName/>
@@ -60,7 +49,9 @@
                     </method>
                 </methodList>
                 <relationList>
+                    <staticText>Seznam vazeb:</staticText>
                     <relation>
+                        <staticText>Tady taky kupodivu může být text...</staticText>
                         <relationFromClassname/>
                         <relationToClassname/>
                         <relationType/>
@@ -70,7 +61,6 @@
                         <relationCardinalityEndTo/>
                     </relation>
                 </relationList>
-                <classname style="format4"/>
             </class>
         </classList>
     </model>
