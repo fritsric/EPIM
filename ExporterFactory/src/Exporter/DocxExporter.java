@@ -17,8 +17,11 @@ import cz.cvut.indepmod.classmodel.api.model.IAttribute;
 import cz.cvut.indepmod.classmodel.api.model.IClass;
 import cz.cvut.indepmod.classmodel.api.model.IClassModelModel;
 import cz.cvut.indepmod.classmodel.api.model.IMethod;
+import cz.cvut.indepmod.classmodel.api.model.IRelation;
 import java.io.File;
+import java.math.BigInteger;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -28,12 +31,50 @@ import org.docx4j.wml.Hdr;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPr;
+import org.docx4j.wml.PPrBase.NumPr;
+import org.docx4j.wml.PPrBase.NumPr.Ilvl;
+import org.docx4j.wml.PPrBase.NumPr.NumId;
 import org.docx4j.wml.PPrBase.PStyle;
 import org.docx4j.wml.R;
 import org.docx4j.wml.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+/*
+ * TODO: doplnit xsd:
+ *
+ * Přidat tag <oneRow> jako potomka tagů:
+ * - anotation
+ * - anotationAttrs
+ * - anotationAttrValueList
+ * - attribute
+ * - method
+ * - class
+ * - //TODO
+ * 
+ * a možní potomci:
+ * - anotationName
+ * 
+ * - anotationAttrName
+ * 
+ * - anotationAttrValue
+ * 
+ * - attrName
+ * - attrVisibility
+ * - attrDatatype
+ * 
+ * - methodVisibility
+ * - methodName
+ * - methodReturnType
+ * 
+ * - classVisibility
+ * - classname
+ * 
+ * - staticText
+ * 
+ * Zrušit tag heading, nahradí ho oneRow.
+ */
 
 /**
  *
@@ -51,7 +92,7 @@ public class DocxExporter {
     private Hdr frHeader = null;
     private Ftr frFooter = null;
     private ObjectFactory frOF = null;
-    
+
     public DocxExporter(String isTemplatePath, String isOutputPath, IClassModelModel irData)
     {
         fsTemplatePath = isTemplatePath;
@@ -94,9 +135,9 @@ public class DocxExporter {
 
         if(lrNodes.getLength() == 0)
             throw new BadTemplateException("Tag 'docxTemplate' not found!");
-        
+
         ParseDocxTemplate(lrNodes.item(0).getChildNodes());
-        
+
         try
         {
             lrWOF.write(lrOutputFile, frWordDocument);
@@ -128,7 +169,7 @@ public class DocxExporter {
             } else if(lsNodeName.equals("footer")) {
                 ParseFooter(lrCurrentNode.getChildNodes());
             } else if(lsNodeName.equals("staticText")) {
-                OutputSingleStaticText(lrCurrentNode.getTextContent());
+                OutputSingleRow(lrCurrentNode.getTextContent());
             } else if(lsNodeName.equals("model")) {
                 ParseModel(lrCurrentNode.getChildNodes());
             }
@@ -154,7 +195,7 @@ public class DocxExporter {
             if(lsNodeName.equals("modelImage")) {
                 // TODO: až bude možné nějak dostat obrázek, nacpat ho tam
             } else if(lsNodeName.equals("staticText")) {
-                OutputSingleStaticText(lrCurrentNode.getTextContent());
+                OutputSingleRow(lrCurrentNode.getTextContent());
             } else if(lsNodeName.equals("classList")) {
                 ParseClassList(lrCurrentNode.getChildNodes());
             }
@@ -178,20 +219,24 @@ public class DocxExporter {
             lsNodeName = lrCurrentNode.getNodeName();
 
             if(lsNodeName.equals("staticText")) {
-                OutputSingleStaticText(lrCurrentNode.getTextContent());
+                OutputSingleRow(lrCurrentNode.getTextContent());
             } else if(lsNodeName.equals("class")) {
                 ParseClasses(lrCurrentNode.getChildNodes());
             }
         }
     }
-    
+
+    /**
+     * Zpracuje tag class.
+     * @param irNodes 
+     */
     private void ParseClasses(NodeList irNodes)
     {
+        if(frData == null || frData.getClasses() == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
-        
-        if(frData == null)
-            return;
 
         for(IClass lrClass : frData.getClasses())
         {
@@ -201,21 +246,21 @@ public class DocxExporter {
                 lsNodeName = lrCurrentNode.getNodeName();
 
                 if(lsNodeName.equals("staticText")) {
-                    OutputSingleStaticText(lrCurrentNode.getTextContent());
+                    OutputSingleRow(lrCurrentNode.getTextContent());
                 } else if (lsNodeName.equals("heading")) {
-                    ParseHeading(lrClass, lrCurrentNode.getChildNodes());
+                    //ParseHeading(lrClass, lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("anotationList")) {
                     ParseAnotationList((Set<IAnotation>) lrClass.getAnotations(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("attrList")) {
                     ParseAttrList((Set<IAttribute>) lrClass.getAttributeModels(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("classVisibility")) {
-                    //lrClass.getVisibility();
+                    OutputSingleRow("Viditelnost: " + lrClass.getVisibility());
                 } else if (lsNodeName.equals("methodList")) {
                     ParseMethodList((Set<IMethod>) lrClass.getMethodModels(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("relationList")) {
-                    
+                    ParseRelationList((Collection<IRelation>) lrClass.getRelatedClass(), lrCurrentNode.getChildNodes());
                 } else if (lsNodeName.equals("classname")) {
-                    //lrClass.getTypeName();
+                    OutputSingleRow(lrClass.getTypeName());
                 }
             }
         }
@@ -228,6 +273,9 @@ public class DocxExporter {
      */
     private void ParseAnotationList(Set<IAnotation> irAnotationList, NodeList irNodes)
     {
+        if(irAnotationList == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -237,7 +285,7 @@ public class DocxExporter {
             lsNodeName = lrCurrentNode.getNodeName();
 
             if(lsNodeName.equals("staticText")) {
-
+                OutputSingleRow(lrCurrentNode.getTextContent());
             } else if(lsNodeName.equals("anotation")) {
                 ParseAnotation(irAnotationList, lrCurrentNode.getChildNodes());
             }
@@ -251,6 +299,9 @@ public class DocxExporter {
      */
     private void ParseAnotation(Set<IAnotation> irAnotationList, NodeList irNodes)
     {
+        if(irAnotationList == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -262,9 +313,9 @@ public class DocxExporter {
                 lsNodeName = lrCurrentNode.getNodeName();
 
                 if(lsNodeName.equals("staticText")) {
-                    OutputSingleStaticText(lrCurrentNode.getTextContent());
+                    OutputSingleRow(lrCurrentNode.getTextContent());
                 } else if (lsNodeName.equals("anotationName")) {
-                    //lrAnotation.getName();
+                    OutputSingleRow(lrAnotation.getName());
                 } else if (lsNodeName.equals("anotationAttrs")) {
                     ParseAnotationAttributes(lrAnotation.getAttributes(), lrCurrentNode.getChildNodes());
                 }
@@ -279,6 +330,9 @@ public class DocxExporter {
      */
     private void ParseAnotationAttributes(Collection<IAnotationValue> irAnotationAttrs, NodeList irNodes)
     {
+        if(irAnotationAttrs == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -290,9 +344,9 @@ public class DocxExporter {
                 lsNodeName = lrCurrentNode.getNodeName();
 
                 if(lsNodeName.equals("staticText")) {
-                    OutputSingleStaticText(lrCurrentNode.getTextContent());
+                    OutputSingleRow(lrCurrentNode.getTextContent());
                 } else if (lsNodeName.equals("anotationAttrName")) {
-                    //lrAnotationValue.getName();
+                    OutputListItem(lrAnotationValue.getName(), 0);
                 } else if (lsNodeName.equals("anotationAttrValueList")) {
                     ParseAnotationAttrValueList(lrAnotationValue.getValues(), lrCurrentNode.getChildNodes());
                 }
@@ -307,6 +361,9 @@ public class DocxExporter {
      */
     private void ParseAnotationAttrValueList(Collection<String> irAnotationAttrValues, NodeList irNodes)
     {
+        if(irAnotationAttrValues == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -318,9 +375,9 @@ public class DocxExporter {
                 lsNodeName = lrCurrentNode.getNodeName();
 
                 if(lsNodeName.equals("staticText")) {
-                    OutputSingleStaticText(lrCurrentNode.getTextContent());
+                    OutputSingleRow(lrCurrentNode.getTextContent());
                 } else if (lsNodeName.equals("anotationAttrValue")) {
-                    // lsAnotationAttrValue
+                    OutputListItem(lsAnotationAttrValue, 1);
                 }
             }
         }
@@ -333,6 +390,9 @@ public class DocxExporter {
      */
     private void ParseAttrList(Set<IAttribute> irAttributes, NodeList irNodes)
     {
+        if(irAttributes == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -342,7 +402,7 @@ public class DocxExporter {
             lsNodeName = lrCurrentNode.getNodeName();
 
             if(lsNodeName.equals("staticText")) {
-                OutputSingleStaticText(lrCurrentNode.getTextContent());
+                OutputSingleRow(lrCurrentNode.getTextContent());
             } else if(lsNodeName.equals("attribute")) {
                 ParseAttributes(irAttributes, lrCurrentNode.getChildNodes());
             }
@@ -356,6 +416,9 @@ public class DocxExporter {
      */
     private void ParseAttributes(Set<IAttribute> irAttributes, NodeList irNodes)
     {
+        if(irAttributes == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -367,22 +430,30 @@ public class DocxExporter {
                 lsNodeName = lrCurrentNode.getNodeName();
 
                 if(lsNodeName.equals("staticText")) {
-                    OutputSingleStaticText(lrCurrentNode.getTextContent());
+                    OutputSingleRow(lrCurrentNode.getTextContent());
                 } else if (lsNodeName.equals("attrName")) {
-                    //lrAttribute.getName();
+                    OutputSingleRow(lrAttribute.getName());
                 } else if (lsNodeName.equals("attrVisibility")) {
-                    //lrAttribute.getVisibility();
+                    OutputSingleRow(lrAttribute.getVisibility().toString());
                 } else if (lsNodeName.equals("attrDataType")) {
-                    //lrAttribute.getType();
+                    OutputSingleRow(lrAttribute.getType().getTypeName());
                 } else if (lsNodeName.equals("anotationList")) {
-                    //ParseAnotationList(lrAttribute.getAnotations(), lrCurrentNode.getChildNodes());
+                    ParseAnotationList((Set<IAnotation>) lrAttribute.getAnotations(), lrCurrentNode.getChildNodes());
                 }
             }
         }
     }
     
+    /**
+     * Zpracuje tag methodList.
+     * @param irMethodList
+     * @param irNodes 
+     */
     private void ParseMethodList(Set<IMethod> irMethodList, NodeList irNodes)
     {
+        if(irMethodList == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -392,15 +463,23 @@ public class DocxExporter {
             lsNodeName = lrCurrentNode.getNodeName();
 
             if(lsNodeName.equals("staticText")) {
-                OutputSingleStaticText(lrCurrentNode.getTextContent());
+                OutputSingleRow(lrCurrentNode.getTextContent());
             } else if(lsNodeName.equals("method")) {
                 ParseMethods(irMethodList, lrCurrentNode.getChildNodes());
             }
         }
     }
 
+    /**
+     * Zpracuje tag method.
+     * @param irMethodList
+     * @param irNodes 
+     */
     private void ParseMethods(Set<IMethod> irMethodList, NodeList irNodes)
     {
+        if(irMethodList == null)
+            return;
+
         Node lrCurrentNode;
         String lsNodeName;
 
@@ -412,20 +491,103 @@ public class DocxExporter {
                 lsNodeName = lrCurrentNode.getNodeName();
 
                 if(lsNodeName.equals("staticText")) {
-                    OutputSingleStaticText(lrCurrentNode.getTextContent());
+                    OutputSingleRow(lrCurrentNode.getTextContent());
                 } else if (lsNodeName.equals("methodVisibility")) {
-                    //lrMethod.getVisibility();
+                    OutputSingleRow(lrMethod.getVisibility().toString());
                 } else if (lsNodeName.equals("methodName")) {
-                    //lrMethod.getName();
+                    OutputSingleRow(lrMethod.getName());
                 } else if (lsNodeName.equals("methodReturnType")) {
-                    //lrMethod.getType();
+                    OutputSingleRow(lrMethod.getType().getTypeName());
                 } else if (lsNodeName.equals("attrList")) {
                     ParseAttrList((Set<IAttribute>) lrMethod.getAttributeModels(), lrCurrentNode.getChildNodes());
                 }
             }
         }
     }
-    
+
+    /**
+     * Zpracuje tag relationList.
+     * @param irRelations
+     * @param irNodes 
+     */
+    private void ParseRelationList(Collection<IRelation> irRelations, NodeList irNodes)
+    {
+        if(irRelations == null)
+            return;
+
+        Node lrCurrentNode;
+        String lsNodeName;
+
+        for(int i = 0; i < irNodes.getLength(); i++)
+        {
+            lrCurrentNode = irNodes.item(i);
+            lsNodeName = lrCurrentNode.getNodeName();
+
+            if(lsNodeName.equals("staticText")) {
+                OutputSingleRow(lrCurrentNode.getTextContent());
+            } else if(lsNodeName.equals("relation")) {
+                ParseRelations(irRelations, lrCurrentNode.getChildNodes());
+            }
+        }
+    }
+
+    /**
+     * Zpracuje tag relation.
+     * @param irRelations
+     * @param irNodes 
+     */
+    private void ParseRelations(Collection<IRelation> irRelations, NodeList irNodes)
+    {
+        if(irRelations == null)
+            return;
+
+        Node lrCurrentNode;
+        String lsNodeName;
+
+        for(IRelation lrRelation : irRelations)
+        {
+            for(int i = 0; i < irNodes.getLength(); i++)
+            {
+                lrCurrentNode = irNodes.item(i);
+                lsNodeName = lrCurrentNode.getNodeName();
+
+                if(lsNodeName.equals("staticText")) {
+                    OutputSingleRow(lrCurrentNode.getTextContent());
+                } else if (lsNodeName.equals("relationFromClassname")) {
+                    OutputSingleRow(lrRelation.getStartingClass().getTypeName());
+                } else if (lsNodeName.equals("relationToClassname")) {
+                    OutputSingleRow(lrRelation.getEndingClass().getTypeName());
+                } else if (lsNodeName.equals("relationType")) {
+                    String lsOutput = "";
+
+                    switch(lrRelation.getRelationType())
+                    {
+                        case RELATION:          lsOutput = "vztah";     break;
+                        case COMPOSITION:       lsOutput = "kompozice"; break;
+                        case AGREGATION:        lsOutput = "agregace";  break;
+                        case GENERALIZATION:    lsOutput = "zobecnění"; break;
+                        case REALISATION:       lsOutput = "realizace"; break;
+                        default:                lsOutput = "<neznámý typ vztahu>";
+                    }
+
+                    OutputSingleRow(lsOutput);
+                } else if (lsNodeName.equals("relationCardinalityStartFrom")) {
+                    OutputSingleRow(String.valueOf(lrRelation.getStartCardinality().getFrom()));
+                }  else if (lsNodeName.equals("relationCardinalityStartTo")) {
+                    OutputSingleRow(String.valueOf(lrRelation.getStartCardinality().getTo()));
+                }  else if (lsNodeName.equals("relationCardinalityEndFrom")) {
+                    OutputSingleRow(String.valueOf(lrRelation.getEndCardinality().getFrom()));
+                }  else if (lsNodeName.equals("relationCardinalityEndTo")) {
+                    OutputSingleRow(String.valueOf(lrRelation.getEndCardinality().getTo()));
+                }
+            }
+        }
+    }
+
+    /**
+     * Zpracuje tag header, což je záhlaví dokumentu.
+     * @param irNodes 
+     */
     private void ParseHeader(NodeList irNodes)
     {
         Node lrCurrentNode;
@@ -445,6 +607,10 @@ public class DocxExporter {
         OutputHeader(lsWholeText);
     }
 
+    /**
+     * Zpracuje tag footer, což je zápatí dokumentu.
+     * @param irNodes 
+     */
     private void ParseFooter(NodeList irNodes)
     {
         Node lrCurrentNode;
@@ -464,31 +630,11 @@ public class DocxExporter {
         OutputFooter(lsWholeText);
     }
 
-    private void ParseHeading(IClass irClass, NodeList irNodes)
-    {
-        Node lrCurrentNode;
-        String lsNodeName;
-
-        for(int i = 0; i < irNodes.getLength(); i++)
-        {
-            lrCurrentNode = irNodes.item(i);
-            lsNodeName = lrCurrentNode.getNodeName();
-
-            if(lsNodeName.equals("staticText")) {
-                //OutputSingleStaticText(lrCurrentNode.getTextContent());
-            } else if(lsNodeName.equals("classname")) {
-                //irClass.getTypeName();
-            }
-        }
-    }
-
-    private void OutputSingleStaticText(String isText)
-    {
-        P lrPara = CreateParagraphWithText(isText);
-        // a celý to dám do dokumentu
-        frWordDocumentBody.getEGBlockLevelElts().add(lrPara);
-    }
-    
+    /**
+     * Vytvoří odstavec se zadaným textem.
+     * @param isText Text, který má být v odstavci.
+     * @return 
+     */
     private P CreateParagraphWithText(String isText)
     {
         // Vytvořit prvky...
@@ -510,17 +656,73 @@ public class DocxExporter {
         lrPara.getParagraphContent().add(lrParaProps);
         // ... a přidám text
         lrPara.getParagraphContent().add(lrRun);
-        
         return lrPara;
     }
-    
+
+    /**
+     * Do dokumentu zapíše jeden řádek textu.
+     * @param isText Text k zapsání.
+     */
+    private void OutputSingleRow(String isText)
+    {
+        P lrPara = CreateParagraphWithText(isText);
+        // a celý to dám do dokumentu
+        frWordDocumentBody.getEGBlockLevelElts().add(lrPara);
+    }
+
+    /**
+     * Zadaný text zapíše do záhlaví.
+     * @param isText 
+     */
     private void OutputHeader(String isText)
     {
         frHeader.getEGBlockLevelElts().add(CreateParagraphWithText(isText));
     }
-    
+
+    /**
+     * Zadaný text zapíše do zápatí.
+     * @param isText 
+     */
     private void OutputFooter(String isText)
     {
         frFooter.getEGBlockLevelElts().add(CreateParagraphWithText(isText));
+    }
+
+    /**
+     * Zapíše seznam textů jako položky seznamu se zadanou úrovní.
+     * Zatím nevyužito, ale může se hodit.
+     * @param irTexts   Seznam textů k zapsání.
+     * @param inLevel   Úroveň seznamu. 0 je nejmenší, 8 největší.
+     */
+    private void OutputList(List<String> irTexts, int inLevel)
+    {
+        for(String lsText : irTexts)
+        {
+            OutputListItem(lsText, inLevel);
+        }
+    }
+
+    /**
+     * Zapíše položku seznamu se zadaným textem a úrovní.
+     * @param isText    Text.
+     * @param inLevel   Úroveň seznamu. 0 je nejmenší, 8 největší.
+     */
+    private void OutputListItem(String isText, int inLevel)
+    {
+        P lrParagraph = CreateParagraphWithText(isText);
+
+        NumPr lrNumPr = frOF.createPPrBaseNumPr();
+
+        Ilvl lrILVL = frOF.createPPrBaseNumPrIlvl();
+        NumId lrNumID = frOF.createPPrBaseNumPrNumId();
+
+        lrILVL.setVal(new BigInteger(String.valueOf(inLevel)));
+        lrNumID.setVal(BigInteger.ONE);
+
+        lrNumPr.setIlvl(lrILVL);
+        lrNumPr.setNumId(lrNumID);
+
+        lrParagraph.getPPr().setNumPr(lrNumPr);
+        this.frWordDocumentBody.getEGBlockLevelElts().add(lrParagraph);
     }
 }

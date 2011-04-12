@@ -10,6 +10,7 @@ import cz.cvut.hnatuluk.checkers.FileChecker;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.structure.SectionWrapper;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -17,6 +18,7 @@ import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.HeaderPart;
+import org.docx4j.openpackaging.parts.WordprocessingML.NumberingDefinitionsPart;
 import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.Body;
 import org.docx4j.wml.FooterReference;
@@ -24,8 +26,10 @@ import org.docx4j.wml.Ftr;
 import org.docx4j.wml.Hdr;
 import org.docx4j.wml.HdrFtrRef;
 import org.docx4j.wml.HeaderReference;
+import org.docx4j.wml.Numbering;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.SectPr;
+import org.docx4j.XmlUtils;
 
 /**
  *
@@ -71,7 +75,7 @@ public class WordOutputFactory {
         return createOutputFile(new File(f));
     }
 
-    public WordDocument createOutputWorkbook(File f) throws InvalidFormatException, BadExtensionException {
+    public WordDocument createOutputWorkbook(File f) throws InvalidFormatException, BadExtensionException, JAXBException {
         String filename = f.getName();
         switch (EXTENSIONS.getExtension(filename)) {
             case DOCX: {
@@ -80,6 +84,7 @@ public class WordOutputFactory {
                 Body b = pcg.getMainDocumentPart().getJaxbElement().getBody();
                 Hdr lrHeader = SetupHeader(pcg);
                 Ftr lrFooter = SetupFooter(pcg);
+                SetupNumbering(pcg);
                 WordDocument ret = new WordDocument(of, b, pcg, lrHeader, lrFooter);
                 return ret;
             }
@@ -91,7 +96,7 @@ public class WordOutputFactory {
         }
     }
 
-    public WordDocument createOutWorkbook(String f) throws BadExtensionException, InvalidFormatException {
+    public WordDocument createOutWorkbook(String f) throws BadExtensionException, InvalidFormatException, JAXBException {
         return createOutputWorkbook(new File(f));
     }
 
@@ -180,4 +185,107 @@ public class WordOutputFactory {
 
         return lrFooter;
     }
+    
+    private void SetupNumbering(WordprocessingMLPackage irPackage) throws InvalidFormatException, JAXBException
+    {
+        NumberingDefinitionsPart lrNDP = new NumberingDefinitionsPart();
+        lrNDP.setJaxbElement( (Numbering) XmlUtils.unmarshalString(csInitialNumbering) );
+	irPackage.getMainDocumentPart().addTargetPart(lrNDP);
+    }
+
+    private static final String csInitialNumbering =
+            "<w:numbering xmlns:ve=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" xmlns:w10=\"urn:schemas-microsoft-com:office:word\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\">"
+            + "<w:abstractNum w:abstractNumId=\"0\">"
+            + "<w:lvl w:ilvl=\"0\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"bullet\"/>"
+                + "<w:lvlText w:val=\"\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"720\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+                + "<w:rPr>"
+                    + "<w:rFonts w:ascii=\"Symbol\" w:hAnsi=\"Symbol\" w:hint=\"default\"/>"
+                + "</w:rPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"1\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"bullet\"/>"
+                + "<w:lvlText w:val=\"o\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"1440\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+                + "<w:rPr>"
+                    + "<w:rFonts w:ascii=\"Courier New\" w:hAnsi=\"Courier New\" w:hint=\"default\"/>"
+                + "</w:rPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"2\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"lowerRoman\"/>"
+                + "<w:lvlText w:val=\"%3)\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"1080\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"3\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"decimal\"/>"
+                + "<w:lvlText w:val=\"(%4)\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"1440\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"4\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"lowerLetter\"/>"
+                + "<w:lvlText w:val=\"(%5)\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"1800\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"5\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"lowerRoman\"/>"
+                + "<w:lvlText w:val=\"(%6)\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"2160\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"6\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"decimal\"/>"
+                + "<w:lvlText w:val=\"%7.\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"2520\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"7\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"lowerLetter\"/>"
+                + "<w:lvlText w:val=\"%8.\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"2880\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+            + "<w:lvl w:ilvl=\"8\">"
+                + "<w:start w:val=\"1\"/>"
+                + "<w:numFmt w:val=\"lowerRoman\"/>"
+                + "<w:lvlText w:val=\"%9.\"/>"
+                + "<w:lvlJc w:val=\"left\"/>"
+                + "<w:pPr>"
+                    + "<w:ind w:left=\"3240\" w:hanging=\"360\"/>"
+                + "</w:pPr>"
+            + "</w:lvl>"
+        + "</w:abstractNum>"
+        + "<w:num w:numId=\"1\">"
+            + "<w:abstractNumId w:val=\"0\"/>"
+         + "</w:num>"
+        + "</w:numbering>";
 }

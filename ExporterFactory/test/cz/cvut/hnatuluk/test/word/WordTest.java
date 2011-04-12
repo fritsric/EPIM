@@ -18,6 +18,9 @@ import org.docx4j.wml.JcEnumeration;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.P;
 import org.docx4j.wml.PPr;
+import org.docx4j.wml.PPrBase.NumPr;
+import org.docx4j.wml.PPrBase.NumPr.Ilvl;
+import org.docx4j.wml.PPrBase.NumPr.NumId;
 import org.docx4j.wml.PPrBase.PStyle;
 import org.docx4j.wml.R;
 import org.docx4j.wml.RFonts;
@@ -32,6 +35,65 @@ import org.junit.Test;
  * @author Lukáš Hnaťuk ČVUT FEL 2010
  */
 public class WordTest {
+    @Test
+    public void testList() throws Exception
+    {
+        WordOutputFactory wof = ExportFactory.getWordFactory();
+        File f = wof.createOutputFile("testFiles/WordFactory/testlist.docx");
+        WordDocument wd = wof.createOutputWorkbook(f);
+        Body b = wd.getDocumentBody();
+        ObjectFactory cf = wd.getCreateFactory();
+        P para = cf.createP();
+        //Nastaví styl
+        PPr ppr = cf.createPPr();
+        PStyle pStyle = cf.createPPrBasePStyle();
+        pStyle.setVal("style0");
+        NumPr numpr2 = cf.createPPrBaseNumPr();
+        Ilvl ilvl = cf.createPPrBaseNumPrIlvl();
+        ilvl.setVal(BigInteger.ZERO);
+        NumId numid = cf.createPPrBaseNumPrNumId();
+        numid.setVal(BigInteger.ONE);
+        numpr2.setIlvl(ilvl);
+        numpr2.setNumId(numid);
+        ppr.setNumPr(numpr2);
+        //Nastaví run a přidá text
+        R run = cf.createR();
+        Text t = cf.createText();
+        t.setValue("Hello world!!!");
+        run.getRunContent().add(t);
+        //Přidat styl do odstavce
+        ppr.setPStyle(pStyle);
+        //A pak to vše poskládat zpět
+        para.getParagraphContent().add(ppr);
+        para.getParagraphContent().add(run);
+        
+        P para2 = cf.createP();
+        para2.getParagraphContent().add(ppr);
+        para2.getParagraphContent().add(run);
+        
+        P para3 = cf.createP();
+        //Nastaví styl
+        PPr ppr2 = cf.createPPr();
+        //NumPicBullet numpr = cf.createNumberingNumPicBullet();
+        NumPr numpr3 = cf.createPPrBaseNumPr();
+        Ilvl ilvl2 = cf.createPPrBaseNumPrIlvl();
+        ilvl2.setVal(BigInteger.ONE);
+        numpr3.setIlvl(ilvl2);
+        numpr3.setNumId(numid);
+        ppr2.setNumPr(numpr3);
+        //Nastaví run a přidá text
+        ppr2.setPStyle(pStyle);
+        //A pak to vše poskládat zpět
+        para3.getParagraphContent().add(ppr2);
+        para3.getParagraphContent().add(run);
+        
+        
+        b.getEGBlockLevelElts().add(para);
+        b.getEGBlockLevelElts().add(para2);
+        b.getEGBlockLevelElts().add(para3);
+        wof.write(f, wd);
+    }
+    
     @Test
     public void testDocxExporter() throws Exception {
         DocxExporter lrExporter = new DocxExporter("testFiles/XMLBinding/template.xml", "testFiles/WordFactory/exportertest.docx", null);
