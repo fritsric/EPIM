@@ -141,4 +141,8 @@ public class ClassModelGraph extends JGraph {
             }
         });
     }
+
+    public Collection<TypeModel> getAllTypes() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

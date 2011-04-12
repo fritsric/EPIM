@@ -8,6 +8,9 @@ import cz.cvut.indepmod.classmodel.actions.ClassModelEditClassDialogRemoveAnotat
 import cz.cvut.indepmod.classmodel.actions.ClassModelEditClassDialogRemoveAttribute;
 import cz.cvut.indepmod.classmodel.actions.ClassModelEditClassDialogRemoveMethod;
 import cz.cvut.indepmod.classmodel.actions.ClassModelSaveEditClassDialog;
+import cz.cvut.indepmod.classmodel.api.model.IAnotation;
+import cz.cvut.indepmod.classmodel.api.model.IAttribute;
+import cz.cvut.indepmod.classmodel.api.model.IMethod;
 import cz.cvut.indepmod.classmodel.workspace.ClassModelGraph;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AnotationModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AttributeModel;
@@ -142,9 +145,9 @@ public class ClassModelEditClassDialog extends ClassModelEditClassDialogView imp
      * dialog
      */
     private void loadAnotationListValues() {
-        Set<AnotationModel> anots = this.classModel.getAnotations();
+        Set<IAnotation> anots = this.classModel.getAnotations();
         this.anotationListModel.clear();
-        for (AnotationModel anot : anots) {
+        for (IAnotation anot : anots) {
             this.anotationListModel.addElement(anot);
         }
     }
@@ -154,9 +157,9 @@ public class ClassModelEditClassDialog extends ClassModelEditClassDialogView imp
      * dialog
      */
     private void loadAttributeListValues() {
-        Set<AttributeModel> attributes = this.classModel.getAttributeModels();
+        Set<IAttribute> attributes = this.classModel.getAttributeModels();
         this.attributeListModel.clear();
-        for (AttributeModel attr : attributes) {
+        for (IAttribute attr : attributes) {
             this.attributeListModel.addElement(attr);
         }
     }
@@ -166,9 +169,9 @@ public class ClassModelEditClassDialog extends ClassModelEditClassDialogView imp
      * dialog
      */
     private void loadMethodsListValues() {
-        Set<MethodModel> methods = this.classModel.getMethodModels();
+        Set<IMethod> methods = this.classModel.getMethodModels();
         this.methodListModel.clear();
-        for (MethodModel method : methods) {
+        for (IMethod method : methods) {
             this.methodListModel.addElement(method);
         }
     }

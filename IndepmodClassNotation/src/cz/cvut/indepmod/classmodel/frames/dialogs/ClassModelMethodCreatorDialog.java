@@ -1,5 +1,6 @@
 package cz.cvut.indepmod.classmodel.frames.dialogs;
 
+import cz.cvut.indepmod.classmodel.api.model.IAttribute;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.AttributeModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.MethodModel;
 import cz.cvut.indepmod.classmodel.workspace.cell.model.classModel.TypeModel;
@@ -44,7 +45,7 @@ public class ClassModelMethodCreatorDialog extends ClassModelMethodCreatorDialog
                 TypeModel returnType = (TypeModel) typeBox.getSelectedItem();
 
                 if (name.matches("^[A-Za-z][0-9A-Za-z]*$")) {
-                    Set<AttributeModel> attrs = new HashSet<AttributeModel>();
+                    Set<IAttribute> attrs = new HashSet<IAttribute>();
                     int size = attributeListModel.size();
                     for (int i = 0; i < size; i++) {
                         AttributeModel a = (AttributeModel) attributeListModel.get(i);
