@@ -21,6 +21,15 @@ public class TestRelation implements IRelation {
     public ICardinality frEndCrd = new TestCardinality();
     public RelationType frRelType = RelationType.RELATION;
 
+    public TestRelation(IClass irClsFrom, IClass irClsTo, RelationType irRelType, ICardinality irCardinalityFrom, ICardinality irCardinalityTo)
+    {
+        frStartCls = irClsFrom;
+        frEndCls = irClsTo;
+        frStartCrd = irCardinalityFrom;
+        frEndCrd = irCardinalityTo;
+        frRelType = irRelType;
+    }
+    
     @Override
     public IClass getStartingClass() {
         return frStartCls;

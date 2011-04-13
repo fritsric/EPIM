@@ -16,6 +16,14 @@ public class TestCardinality implements ICardinality {
     public int fnFrom = -1;
     public int fnTo = -1;
 
+    public TestCardinality() {}
+    
+    public TestCardinality(int inFrom, int inTo)
+    {
+        fnFrom = inFrom;
+        fnTo = inTo;
+    }
+    
     @Override
     public int getFrom() {
         return fnFrom;

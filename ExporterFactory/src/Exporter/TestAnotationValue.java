@@ -5,7 +5,6 @@
 
 package Exporter;
 
-import cz.cvut.indepmod.classmodel.api.model.IAnotation;
 import cz.cvut.indepmod.classmodel.api.model.IAnotationValue;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,14 +14,14 @@ import java.util.Collection;
  *
  * @author Jan Bažant
  */
-public class TestAnotation implements IAnotation {
+public class TestAnotationValue implements IAnotationValue {
     public String fsName = "";
-    public Collection<IAnotationValue> frAnotationVals = new ArrayList<IAnotationValue>();
+    public Collection<String> frVals = new ArrayList<String>();
 
-    public TestAnotation(String isName, IAnotationValue... irAnotationValue)
+    public TestAnotationValue(String isName, String... irVals)
     {
         fsName = isName;
-        frAnotationVals.addAll(Arrays.asList(irAnotationValue));
+        frVals.addAll(Arrays.asList(irVals));
     }
     
     @Override
@@ -31,8 +30,8 @@ public class TestAnotation implements IAnotation {
     }
 
     @Override
-    public Collection<IAnotationValue> getAttributes() {
-        return frAnotationVals;
+    public Collection<String> getValues() {
+        return frVals;
     }
 
 }

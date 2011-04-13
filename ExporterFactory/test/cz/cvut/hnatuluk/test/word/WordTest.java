@@ -5,13 +5,19 @@
 package cz.cvut.hnatuluk.test.word;
 
 import Exporter.DocxExporter;
+import Exporter.TestAnotation;
+import Exporter.TestAnotationValue;
 import Exporter.TestAtribute;
+import Exporter.TestCardinality;
 import Exporter.TestClass;
 import Exporter.TestClassModelModel;
+import Exporter.TestMethod;
+import Exporter.TestRelation;
 import Exporter.TestType;
 import cz.cvut.hnatuluk.factories.ExportFactory;
 import cz.cvut.hnatuluk.factories.WordFactory.WordDocument;
 import cz.cvut.hnatuluk.factories.WordFactory.WordOutputFactory;
+import cz.cvut.indepmod.classmodel.api.model.RelationType;
 import cz.cvut.indepmod.classmodel.api.model.Visibility;
 import java.io.File;
 import java.math.BigInteger;
@@ -48,9 +54,32 @@ public class WordTest {
         lrClass1.fsTypeName = "Můj typ 1";
         lrClass1.frVisibility = Visibility.PROTECTED;
         lrClass1.frAttributes.add(
-                new TestAtribute(Visibility.PRIVATE, "jméno atributu 1", new TestType("můj typ 1"), null));
+                new TestAtribute(
+                    Visibility.PRIVATE, "jméno atributu 1",
+                    new TestType("můj typ 1")));
+        lrClass1.frAnotations.add(
+                new TestAnotation(
+                    "jméno anotace 1",
+                    new TestAnotationValue("jméno 1", "hodnota1", "hodnota2"),
+                    new TestAnotationValue("jméno 2", "hodnota3", "hodnota4", "hodnota5")));
 
+        lrClass1.frMethods.add(
+                new TestMethod(
+                    "metoda 1",
+                    new TestType("typ metody"),
+                    Visibility.PUBLIC,
+                    new TestAtribute(
+                        Visibility.PRIVATE,
+                        "další jméno 2",
+                        new TestType("další typ 1"),
+                        new TestAnotation(
+                            "anotace metody",
+                            new TestAnotationValue("jméno anotace metody", "hodnota 1 anotace metody", "hodnota 2 anotace metody")))));
+
+        TestClass lrClass2 = new TestClass("moje třída 2", Visibility.PUBLIC);
+        lrClass2.frRelations.add(new TestRelation(lrClass1, lrClass2, RelationType.COMPOSITION, new TestCardinality(1, -1), new TestCardinality(0,1)));        
         lrModel.frClasses.add(lrClass1);
+        lrModel.frClasses.add(lrClass2);
 
         DocxExporter lrExporter = new DocxExporter(
                 "testFiles/XMLBinding/template.xml",

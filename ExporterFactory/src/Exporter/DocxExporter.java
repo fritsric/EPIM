@@ -19,7 +19,6 @@ import cz.cvut.indepmod.classmodel.api.model.IClassModelModel;
 import cz.cvut.indepmod.classmodel.api.model.IMethod;
 import cz.cvut.indepmod.classmodel.api.model.IRelation;
 import java.io.File;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,15 +26,7 @@ import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.wml.Body;
 import org.docx4j.wml.Ftr;
 import org.docx4j.wml.Hdr;
-import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.P;
-import org.docx4j.wml.PPr;
-import org.docx4j.wml.PPrBase.NumPr;
-import org.docx4j.wml.PPrBase.NumPr.Ilvl;
-import org.docx4j.wml.PPrBase.NumPr.NumId;
-import org.docx4j.wml.PPrBase.PStyle;
-import org.docx4j.wml.R;
-import org.docx4j.wml.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -73,6 +64,25 @@ import org.w3c.dom.NodeList;
  * - staticText
  * 
  * Zrušit tag heading, nahradí ho oneRow.
+ * 
+ * TODO2: další změny:
+ * - staticText může mít style
+ * - style nedává smysl u tagů:
+ *   - model
+ *   - classList
+ *   - class
+ *   - methodList
+ *   - method
+ *   - relationList
+ *   - relation
+ *   - anotationList
+ *   - anotation
+ *   - anotationAttrs
+ *   - anotationAttrValueList
+ *   - attrList
+ *   - attribute
+ * Zatím to tam možná nechat, dal by se tak třeba globálně nastavit určitý styl pro všechno, co je
+ * v tom tagu obsaženo. To teď ale nebudu implementovat.
  */
 
 /**
@@ -90,7 +100,7 @@ public class DocxExporter {
     private Body frWordDocumentBody = null;
     private Hdr frHeader = null;
     private Ftr frFooter = null;
-    private ObjectFactory frOF = null;
+    private DocxHelpers frHelpers = null;
 
     public DocxExporter(String isTemplatePath, String isOutputPath, IClassModelModel irData)
     {
@@ -123,7 +133,7 @@ public class DocxExporter {
             frWordDocumentBody = frWordDocument.getDocumentBody();
             frHeader = frWordDocument.getHeader();
             frFooter = frWordDocument.getFooter();
-            frOF = frWordDocument.getCreateFactory();
+            frHelpers = new DocxHelpers(frWordDocument.getCreateFactory());
         }
         catch(Exception e)
         {
@@ -630,32 +640,30 @@ public class DocxExporter {
     }
 
     /**
-     * Vytvoří odstavec se zadaným textem.
-     * @param isText Text, který má být v odstavci.
-     * @return 
+     * Přidá odstavec do těla dokumentu.
+     * @param irPara 
      */
-    private P CreateParagraphWithText(String isText)
+    private void OutputParagraphToBody(P irPara)
     {
-        // Vytvořit prvky...
-        P lrPara = frOF.createP();
-        PPr lrParaProps = frOF.createPPr();
-        R lrRun = frOF.createR();
+        frWordDocumentBody.getEGBlockLevelElts().add(irPara);
+    }
 
-        // defaultní styl
-        PStyle lrParaStyle = frOF.createPPrBasePStyle();
-        lrParaStyle.setVal("my style hard style");
+    /**
+     * Přidá odstavec do záhlaví.
+     * @param irPara 
+     */
+    private void OutputParagraphToHeader(P irPara)
+    {
+        frHeader.getEGBlockLevelElts().add(irPara);
+    }
 
-        // samotný text
-        Text lrText = frOF.createText();
-        lrText.setValue(isText);
-        lrRun.getRunContent().add(lrText);
-
-        // odstavci nastavím styl...
-        lrParaProps.setPStyle(lrParaStyle);
-        lrPara.getParagraphContent().add(lrParaProps);
-        // ... a přidám text
-        lrPara.getParagraphContent().add(lrRun);
-        return lrPara;
+    /**
+     * Přidá odstavec do zápatí.
+     * @param irPara 
+     */
+    private void OutputParagraphToFooter(P irPara)
+    {
+        frFooter.getEGBlockLevelElts().add(irPara);
     }
 
     /**
@@ -664,9 +672,19 @@ public class DocxExporter {
      */
     private void OutputSingleRow(String isText)
     {
-        P lrPara = CreateParagraphWithText(isText);
-        // a celý to dám do dokumentu
-        frWordDocumentBody.getEGBlockLevelElts().add(lrPara);
+        P lrPara = frHelpers.CreateParagraphWithText(isText);
+        OutputParagraphToBody(lrPara);
+    }
+
+    /**
+     * Do dokumentu zapíše jeden řádek textu s definovaným stylováním.
+     * @param isText
+     * @param irStyle 
+     */
+    private void OutputSingleRow(String isText, Style irStyle)
+    {
+        P lrPara = frHelpers.CreateParagraphWithText(isText, irStyle);
+        OutputParagraphToBody(lrPara);
     }
 
     /**
@@ -675,7 +693,17 @@ public class DocxExporter {
      */
     private void OutputHeader(String isText)
     {
-        frHeader.getEGBlockLevelElts().add(CreateParagraphWithText(isText));
+        OutputParagraphToHeader(frHelpers.CreateParagraphWithText(isText));
+    }
+
+    /**
+     * Zadaný text se zadaným stylem zapíše do záhlaví.
+     * @param isText
+     * @param irStyle 
+     */
+    private void OutputHeader(String isText, Style irStyle)
+    {
+        OutputParagraphToHeader(frHelpers.CreateParagraphWithText(isText, irStyle));
     }
 
     /**
@@ -684,7 +712,17 @@ public class DocxExporter {
      */
     private void OutputFooter(String isText)
     {
-        frFooter.getEGBlockLevelElts().add(CreateParagraphWithText(isText));
+        OutputParagraphToFooter(frHelpers.CreateParagraphWithText(isText));
+    }
+
+    /**
+     * Zadaný text se zadaným stylem zapíše do zápatí.
+     * @param isText
+     * @param irStyle 
+     */
+    private void OutputFooter(String isText, Style irStyle)
+    {
+        OutputParagraphToFooter(frHelpers.CreateParagraphWithText(isText, irStyle));
     }
 
     /**
@@ -708,20 +746,6 @@ public class DocxExporter {
      */
     private void OutputListItem(String isText, int inLevel)
     {
-        P lrParagraph = CreateParagraphWithText(isText);
-
-        NumPr lrNumPr = frOF.createPPrBaseNumPr();
-
-        Ilvl lrILVL = frOF.createPPrBaseNumPrIlvl();
-        NumId lrNumID = frOF.createPPrBaseNumPrNumId();
-
-        lrILVL.setVal(new BigInteger(String.valueOf(inLevel)));
-        lrNumID.setVal(BigInteger.ONE);
-
-        lrNumPr.setIlvl(lrILVL);
-        lrNumPr.setNumId(lrNumID);
-
-        lrParagraph.getPPr().setNumPr(lrNumPr);
-        this.frWordDocumentBody.getEGBlockLevelElts().add(lrParagraph);
+        OutputParagraphToBody(frHelpers.CreateListItem(isText, inLevel));
     }
 }

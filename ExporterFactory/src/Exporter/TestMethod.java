@@ -9,6 +9,7 @@ import cz.cvut.indepmod.classmodel.api.model.IAttribute;
 import cz.cvut.indepmod.classmodel.api.model.IMethod;
 import cz.cvut.indepmod.classmodel.api.model.IType;
 import cz.cvut.indepmod.classmodel.api.model.Visibility;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,14 @@ public class TestMethod implements IMethod {
     public String fsName = "";
     public IType frType = new TestType("");
 
+    public TestMethod(String isName, TestType irType, Visibility irVis, IAttribute... irAttrs)
+    {
+        fsName = isName;
+        frType = irType;
+        frVisibility = irVis;
+        frAttrs.addAll(Arrays.asList(irAttrs));
+    }
+    
     @Override
     public Visibility getVisibility() {
         return frVisibility;

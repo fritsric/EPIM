@@ -28,6 +28,14 @@ public class TestClass implements IClass {
     public Collection<IRelation> frRelations = new ArrayList<IRelation>();
     public Set<IAnotation> frAnotations = new HashSet<IAnotation>();
     public String fsTypeName = "";
+    
+    public TestClass() {}
+    
+    public TestClass(String isTypeName, Visibility irVis)
+    {
+        fsTypeName = isTypeName;
+        frVisibility = irVis;
+    }
 
     @Override
     public Visibility getVisibility() {

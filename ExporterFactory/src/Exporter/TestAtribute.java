@@ -10,6 +10,7 @@ import cz.cvut.indepmod.classmodel.api.model.IAttribute;
 import cz.cvut.indepmod.classmodel.api.model.IType;
 import cz.cvut.indepmod.classmodel.api.model.Visibility;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -27,14 +28,12 @@ public class TestAtribute implements IAttribute {
         
     }
     
-    public TestAtribute(Visibility irVis, String isName, IType irType, Collection<IAnotation> irAnots)
+    public TestAtribute(Visibility irVis, String isName, IType irType, IAnotation... irAnotation)
     {
         frVisibility = irVis;
         fsName = isName;
         frType = irType;
-
-        if(irAnots != null)
-            frAnotations = irAnots;
+        frAnotations.addAll(Arrays.asList(irAnotation));
     }
     
     @Override
