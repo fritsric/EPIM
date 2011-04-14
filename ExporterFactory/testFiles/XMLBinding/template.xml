@@ -1,26 +1,30 @@
 <?xml version="1.0"?>
 <docxTemplate>
     <header>
-        <staticText>Text v záhlaví</staticText>
+        <staticText style="header">Text v záhlaví</staticText>
     </header>
     <footer>
-        <staticText>Text v zápatí</staticText>
+        <staticText style="footer">Text v zápatí</staticText>
     </footer>
-    <staticText>Tohle je můj super model.</staticText>
+    <staticText style="mainHeading">Tohle je můj super model.</staticText>
     <model>
         <modelImage/>
         <classList>
-            <staticText style="format1">Seznam tříd</staticText>
+            <staticText style="classHeading">Seznam tříd</staticText>
             <class>
-                <staticText>Třída </staticText>
-                <classname style="format4"/>
-                <staticText>Viditelnost:</staticText>
-                <classVisibility/>
+                <oneRow>
+                    <staticText style="classLabel">Třída</staticText>
+                    <classname style="className"/>
+                </oneRow>
+                <oneRow>
+                  <staticText style="style2">Viditelnost: </staticText>
+                  <classVisibility style="style3"/>
+                </oneRow>
                 <anotationList>
-                    <staticText>Seznam anotací:</staticText>
+                    <staticText style="sectionHeading">Seznam anotací:</staticText>
                     <anotation>
-                        <anotationName/>
-                        <staticText>Atributy:</staticText>
+                        <anotationName style="anotationName" />
+                        <staticText>Atributy anotace:</staticText>
                         <anotationAttrs>
                             <anotationAttrName/>
                             <anotationAttrValueList>
@@ -30,26 +34,44 @@
                     </anotation>
                 </anotationList>
                 <attrList>
-                    <staticText>Seznam atributů:</staticText>
+                    <staticText style="sectionHeading">Seznam atributů:</staticText>
                     <attribute>
-                        <attrName style="format5"/>
-                        <attrVisibility/>
-                        <attrDatatype style="format6"/>
+                        <oneRow>
+                            <staticText style="label">Jméno atributu:</staticText>
+                            <attrName style="format5"/>
+                        </oneRow>
+                        <oneRow>
+                            <staticText style="label">Viditelnost:</staticText>
+                            <attrVisibility/>
+                        </oneRow>
+                        <oneRow>
+                            <staticText style="label">Datový typ:</staticText>
+                            <attrDatatype style="format6"/>
+                        </oneRow>
                         <anotationList>
                         </anotationList>
                     </attribute>
                 </attrList>
                 <methodList>
-                    <staticText>Seznam metod:</staticText>
+                    <staticText style="sectionHeading">Seznam metod:</staticText>
                     <method>
-                        <methodVisibility/>
-                        <methodName/>
-                        <methodReturnType/>
+                        <oneRow>
+                            <staticText style="label">Viditelnost:</staticText>
+                            <methodVisibility/>
+                        </oneRow>
+                        <oneRow>
+                            <staticText style="label">Jméno:</staticText>
+                            <methodName/>
+                        </oneRow>
+                        <oneRow>
+                            <staticText style="label">Návratový typ:</staticText>
+                            <methodReturnType/>
+                        </oneRow>
                         <attrList/>
                     </method>
                 </methodList>
                 <relationList>
-                    <staticText>Seznam vazeb:</staticText>
+                    <staticText style="sectionHeading">Seznam vazeb:</staticText>
                     <relation>
                         <staticText>Tady taky kupodivu může být text...</staticText>
                         <relationFromClassname/>

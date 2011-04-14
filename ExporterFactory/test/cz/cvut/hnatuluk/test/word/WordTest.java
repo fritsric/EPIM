@@ -83,6 +83,7 @@ public class WordTest {
 
         DocxExporter lrExporter = new DocxExporter(
                 "testFiles/XMLBinding/template.xml",
+                "testFiles/XMLBinding/styles.xml",
                 "testFiles/WordFactory/exportertestwithdata.docx",
                 lrModel);
         lrExporter.Export();
@@ -149,7 +150,12 @@ public class WordTest {
     
     @Test
     public void testDocxExporter() throws Exception {
-        DocxExporter lrExporter = new DocxExporter("testFiles/XMLBinding/template.xml", "testFiles/WordFactory/exportertest.docx", null);
+        DocxExporter lrExporter =
+                new DocxExporter(
+                    "testFiles/XMLBinding/template.xml",
+                    "testFiles/XMLBinding/styles.xml",
+                    "testFiles/WordFactory/exportertest.docx",
+                    null);
         lrExporter.Export();
     }
 

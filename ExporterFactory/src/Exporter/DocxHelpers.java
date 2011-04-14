@@ -66,12 +66,11 @@ public class DocxHelpers
     public R CreateRunWithText(String isText, Style irStyle)
     {
         R lrRun = CreateRunWithText(isText);
-
         RPr lrRunProps = frOF.createRPr();
-        
+
         if(irStyle.fbItalics) {
-            lrRunProps.setB(frOF.createBooleanDefaultTrue());
-            lrRunProps.setBCs(frOF.createBooleanDefaultTrue());
+            lrRunProps.setI(frOF.createBooleanDefaultTrue());
+            lrRunProps.setICs(frOF.createBooleanDefaultTrue());
         }
         if (irStyle.fbStrike) {
             lrRunProps.setStrike(frOF.createBooleanDefaultTrue());
@@ -130,6 +129,33 @@ public class DocxHelpers
     }
 
     /**
+     * Vyvtoří odstavec bez obsahu a aplikuje formátování (konkrétně zarovnání).
+     * @param irStyle
+     * @return 
+     */
+    public P CreateDefaultParagraph(Style irStyle)
+    {
+        P lrPara = CreateDefaultParagraph();
+
+        if(irStyle.frAlign != Align.DEFAULT)
+        {
+            Jc lrJC = frOF.createJc();
+
+            switch(irStyle.frAlign)
+            {
+                case LEFT:      lrJC.setVal(JcEnumeration.LEFT);    break;
+                case CENTER:    lrJC.setVal(JcEnumeration.CENTER);  break;
+                case RIGHT:     lrJC.setVal(JcEnumeration.RIGHT);   break;
+                case JUSTIFY:   lrJC.setVal(JcEnumeration.BOTH);    break;
+            }
+
+            lrPara.getPPr().setJc(lrJC);
+        }
+
+        return lrPara;
+    }
+
+    /**
      * Vytvoří odstavec se zadaným textem.
      * @param isText Text, který má být v odstavci.
      * @return 
@@ -152,23 +178,8 @@ public class DocxHelpers
      */
     public P CreateParagraphWithText(String isText, Style irStyle)
     {
-        P lrParagraph = CreateDefaultParagraph();
+        P lrParagraph = CreateDefaultParagraph(irStyle);
         lrParagraph.getParagraphContent().add(CreateRunWithText(isText, irStyle));
-
-        if(irStyle.frAlign != Align.DEFAULT) {
-            Jc lrJC = frOF.createJc();
-
-            switch(irStyle.frAlign)
-            {
-                case LEFT:      lrJC.setVal(JcEnumeration.LEFT);    break;
-                case CENTER:    lrJC.setVal(JcEnumeration.CENTER);  break;
-                case RIGHT:     lrJC.setVal(JcEnumeration.RIGHT);   break;
-                case JUSTIFY:   lrJC.setVal(JcEnumeration.BOTH);    break;
-            }
-
-            lrParagraph.getPPr().setJc(lrJC);
-        }
-
         return lrParagraph;
     }
 
@@ -180,7 +191,31 @@ public class DocxHelpers
     public P CreateListItem(String isText, int inLevel)
     {
         P lrParagraph = CreateParagraphWithText(isText);
+        ApplyNumberingToParagraph(lrParagraph, inLevel);
+        return lrParagraph;
+    }
 
+    /**
+     * Vytvoří položku seznamu se zadaným textem, formátem a úrovní.
+     * @param isText
+     * @param inLevel
+     * @param irStyle
+     * @return 
+     */
+    public P CreateListItem(String isText, int inLevel, Style irStyle)
+    {
+        P lrParagraph = CreateParagraphWithText(isText, irStyle);
+        ApplyNumberingToParagraph(lrParagraph, inLevel);
+        return lrParagraph;
+    }
+
+    /**
+     * Zadanému odstavci nastaví takové vlastnosti, aby se zobrazil jako položka seznamu na zadané úrovni.
+     * @param orPara
+     * @param inLevel 
+     */
+    private void ApplyNumberingToParagraph(P orPara, int inLevel)
+    {
         NumPr lrNumPr = frOF.createPPrBaseNumPr();
 
         Ilvl lrILVL = frOF.createPPrBaseNumPrIlvl();
@@ -192,7 +227,6 @@ public class DocxHelpers
         lrNumPr.setIlvl(lrILVL);
         lrNumPr.setNumId(lrNumID);
 
-        lrParagraph.getPPr().setNumPr(lrNumPr);
-        return lrParagraph;
+        orPara.getPPr().setNumPr(lrNumPr);
     }
 }

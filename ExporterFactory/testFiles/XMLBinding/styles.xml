@@ -12,20 +12,53 @@
     <style name="style2">
         <font>
             <family>Lucida Console</family>
-            <size>30</size>
+            <size>15</size>
             <italics />
             <underline />
             <strike />
         </font>
         <color>magenta</color>
-        <align>left</align>
+        <align>right</align>
     </style>
     <style name="style3">
         <font>
             <family>Calibri</family>
-            <size>25</size>
+            <size>8</size>
         </font>
-        <color>red</color>
-        <align>justify</align>
+        <color>ff0000</color>
+        <align>center</align>
+    </style>
+    <style name="header">
+        <font>
+            <italics />
+        </font>
+        <align>center</align>
+    </style>
+    <style name="footer">
+        <color>000080</color>
+        <align>right</align>
+    </style>
+    <style name="mainHeading">
+        <font><size>32</size></font>
+        <color>0000ff</color>
+    </style>
+    <style name="classHeading">
+        <font><size>28</size></font>
+        <color>000080</color>
+    </style>
+    <style name="sectionHeading">
+        <font><size>13</size><bold /></font><color>000080</color>
+    </style>
+    <style name="anotationName">
+        <font><underline /></font>
+    </style>
+    <style name="label">
+        <font><bold /></font>
+    </style>
+    <style name="classLabel">
+        <font><bold /><size>18</size><italics /></font>
+    </style>
+    <style name="className">
+        <font><size>18</size><italics /></font>
     </style>
 </styleTemplate>
