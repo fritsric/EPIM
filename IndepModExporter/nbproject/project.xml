@@ -4,8 +4,16 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>cz.cvut.dvoraj57.ImeModule</code-name-base>
-            <standalone/>
+            <suite-component/>
             <module-dependencies>
+                <dependency>
+                    <code-name-base>cz.cvut.indepmod.classmodel</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <implementation-version/>
+                    </run-dependency>
+                </dependency>
                 <dependency>
                     <code-name-base>org.netbeans.libs.junit4</code-name-base>
                     <build-prerequisite/>
@@ -103,10 +111,6 @@
                 <binary-origin>release/modules/ext/xbean.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/cz-cvut-indepmod-classmodel-api.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/cz-cvut-indepmod-classmodel-api.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/org.springframework.context.support-3.1.0.M1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/org.springframework.context.support-3.1.0.M1.jar</binary-origin>
             </class-path-extension>
@@ -159,12 +163,12 @@
                 <binary-origin>release/modules/ext/docx4j-2.6.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.springframework.orm-3.1.0.M1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.springframework.orm-3.1.0.M1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/org.springframework.web-3.1.0.M1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/org.springframework.web-3.1.0.M1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.springframework.orm-3.1.0.M1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.springframework.orm-3.1.0.M1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/log4j-1.2.15.jar</runtime-relative-path>
