@@ -1,0 +1,45 @@
+body {
+	font-family: serif;
+	font-size: 0.9em;
+	color: #000;
+}
+
+/* Headings */
+h1 {
+	font-size: 250%;
+}
+h2 {
+	font-size: 180%;
+}
+
+/* Plot */
+#plot {
+	text-align: left;
+}
+#plot img {
+	border: 1px solid #000;
+	background-color: #fff;
+}
+
+/* Tables */
+table {
+	border-collapse: collapse;
+	font-size: 100%; /* IE6 */
+}
+caption {
+	margin-top: 1em;
+	padding-bottom: .75em;
+	font-weight: bold;
+	font-size: 140%;
+	text-align: left;
+}
+td, th {
+	padding: .3em 20px;
+	text-align: center;
+}
+th {
+	font-weight: bold;
+}
+td {
+
+}
