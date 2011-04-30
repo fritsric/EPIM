@@ -15,6 +15,14 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.jgraph</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.libs.junit4</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -155,12 +163,12 @@
                 <binary-origin>release/modules/ext/org.springframework.test-3.1.0.M1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.springframework.beans-3.1.0.M1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.springframework.beans-3.1.0.M1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/docx4j-2.6.0.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/docx4j-2.6.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.springframework.beans-3.1.0.M1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.springframework.beans-3.1.0.M1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/org.springframework.web-3.1.0.M1.jar</runtime-relative-path>
