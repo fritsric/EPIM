@@ -104,7 +104,10 @@ public class LaTeXRenderer extends Renderer{
 
         try{
             //write plot
-            ImageIO.write(image, "png", plot);
+            if(image!= null)
+            {
+                ImageIO.write(image, "png", plot);
+            }
 
         }catch (IOException e){
             throw new IOException("todo change error report" , e); //TODO change error report
