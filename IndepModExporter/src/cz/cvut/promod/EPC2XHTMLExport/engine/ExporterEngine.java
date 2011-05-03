@@ -63,13 +63,13 @@ public class ExporterEngine {
         switch(type)
         {
             case DOKUWIKI:
-                renderer = new DokuWikiRenderer(path, name);
+                renderer = new DokuWikiRenderer(path, name); break;
             case LATEX:
-                renderer = new LaTeXRenderer(path, name);
+                renderer = new LaTeXRenderer(path, name); break;
             case XHTML_FOLDER:
-                renderer = new XHTMLFolderRenderer(path, name, theme);
+                renderer = new XHTMLFolderRenderer(path, name, theme); break;
             default:
-                renderer = new XHTMLInlineRenderer(path, name, theme);
+                renderer = new XHTMLInlineRenderer(path, name, theme); break;
         }
         delimiters = new TableDelimiters();
         workspace = model;

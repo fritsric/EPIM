@@ -39,8 +39,8 @@ public final class MenuOnClickAction implements ActionListener {
         } else {
             System.out.println("Otevreny class model ma: "+ classModel.getClasses().size() +" trid.");
             JOptionPane.showMessageDialog(null, "Otevreny class model ma: "+ classModel.getClasses().size() +" trid.");
-            JOptionPane.showMessageDialog(null, "Exportuji do C:/export.html");
-            ExporterEngine ee = new ExporterEngine("C:/export.html", "SuperEPC", "classicBlackTheme", classModel, RendererType.XHTML_INLINE);
+            JOptionPane.showMessageDialog(null, "Exportuji do C:/latex.tex");
+            ExporterEngine ee = new ExporterEngine("C:/", "SuperEPC", "classicBlackTheme", classModel, RendererType.XHTML_FOLDER);
             try {
                 ee.export();
             } catch (IOException ex) {

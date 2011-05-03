@@ -51,7 +51,7 @@ public class XHTMLFolderRenderer extends Renderer{
         html = new File(path + name + ".html");
         layout = new File(dirPath + "layout.css");
         style = new File(dirPath + "style.css");
-        plot = new File(dirPath + "plot.png");
+        //plot = new File(dirPath + "plot.png");
         dir = new File(dirPath);
 
         delimiters = new TableDelimiters();
@@ -131,7 +131,8 @@ public class XHTMLFolderRenderer extends Renderer{
 
         try{
             //write plot
-            ImageIO.write(image, "png", plot);
+            if(image!=null)
+                ImageIO.write(image, "png", plot);
 
         }catch (IOException e){
             throw new IOException("todo change error report" , e); //TODO change error report
