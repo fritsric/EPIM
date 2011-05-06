@@ -1,6 +1,7 @@
 package cz.cvut.hnatuluk.factories;
 
 import cz.cvut.hnatuluk.factories.ExcelFactory.ExcelOutputFactory;
+import cz.cvut.hnatuluk.factories.PDFFactory.PdfOutputFactory;
 import cz.cvut.hnatuluk.factories.WordFactory.WordOutputFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -32,5 +33,10 @@ public class ExportFactory {
     public static WordOutputFactory getWordFactory() throws NoSuchBeanDefinitionException,BeansException{
         init();
         return (WordOutputFactory)ctx.getBean("WordFactory");
+    }
+    
+    public static PdfOutputFactory getPdfFactory() throws NoSuchBeanDefinitionException,BeansException{
+        init();
+        return (PdfOutputFactory)ctx.getBean("PdfFactory");
     }
 }
