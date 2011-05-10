@@ -22,6 +22,7 @@
 
 package cz.cvut.promod.EPC2XHTMLExport.engine;
 
+import cz.prcek.help.rootPath.RootPathFactory;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Hashtable;
@@ -69,7 +70,8 @@ public abstract class Renderer {
      */
     protected static String getResourceFileAsString(final String path) throws IOException{
         //InputStream in = path.getClass().getResourceAsStream(path);
-        InputStream in = new java.io.FileInputStream("D:\\Dokumenty\\Skola\\6.semestr\\RSF\\Git\\EPIM\\IndepModExporter\\resources" + path);//Předělat na resources!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        InputStream in = new java.io.FileInputStream(RootPathFactory.getTheRootPath() + "../../../../IndepModExporter/resources/" + path);//Předělat na resources!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
         StringBuffer fileData = new StringBuffer(1000);
